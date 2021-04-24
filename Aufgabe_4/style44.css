@@ -1,0 +1,42 @@
+body {
+    background-image: url("./assets/bg4.png");
+    background-size: auto;
+    font-family: 'Times New Roman';
+}
+.container{
+  width: 600px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.text{
+  position: absolute;
+  top: 50px;
+  left:50px;
+}
+
+.text h1{
+  position: relative;
+  text-align: left;
+  left: 0px;
+  top: 0px;
+  font-size:  30px;  
+  font-weight: bold;
+  color: white;
+}
+.spalten_3 p{
+  width: 500px;
+  column-count: 3;
+  column-gap: 5px;
+  column-width: 40px;
+  color: black;
+}
+.spalten_2 p{
+  width: 500px;
+  column-count: 2;
+  column-gap: 10px;
+  column-width: 35px;
+  color: black;
+}

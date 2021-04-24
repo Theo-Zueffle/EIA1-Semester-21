@@ -1,0 +1,52 @@
+
+body {
+    background-image: url("./assets/bg3.png");
+    background-size: auto;
+    font-family: 'Times New Roman';
+}
+.container{
+  width: 600px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+div h1 {
+  position: absolute;
+  text-align: left;
+  left: 80px;
+  top: 50px;
+  color: white;
+  font-size:  30px;  
+  font-weight: bold;
+}
+.c_input {
+  text-align: left;
+  color: white; 
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.c_name{  
+  position: absolute;
+  left: 80px;
+  top: 130px;
+}
+
+.c_gruesse{
+  position: absolute;
+  left: 80px;
+  top:200px;
+}
+.c_radio1{
+  position: absolute;
+  left: 80px;
+  top:320px;
+}
+.c_radio2{
+  position: relative;
+  left: 200px;
+  top:320px;
+}

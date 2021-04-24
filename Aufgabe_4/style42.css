@@ -1,0 +1,67 @@
+
+body {
+    background-image: url("./assets/bg2.png");
+    background-size: auto;
+    font-family: 'Times New Roman';
+}
+.container{
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+h1,h2 {
+    position: absolute;
+    left: 40px;
+    color: white;
+    font-size: 20px; 
+}
+h1{
+    top: 80px;
+}
+h2{
+    top: 120px;
+}
+.c_muschel_1{
+    left: 100px;
+    top: -160px;
+    position: relative;
+}
+.c_muschel_2{
+    left: 250px;
+    top: -225px;
+    position: relative; 
+}
+.c_muschel_3{
+    left: 400px;
+    top: -290px;
+    position: relative; 
+}
+
+#muschel_1_z, #muschel_1_of {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+#muschel_2_z, #muschel_2_of {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+#muschel_3_z, #muschel_3_of {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.muschel_zu:hover{
+transition: all 2s ease-in-out 0s;
+opacity:0;
+}
+
+.muschel_zu:not(:hover){
+transition: all 2s ease-in-out 0s;
+opacity:1;
+}
+

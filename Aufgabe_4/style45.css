@@ -1,0 +1,30 @@
+
+body {
+    background-image: url("./assets/bg5.png");
+    background-size: auto;
+    font-family: 'Times New Roman';
+}
+.container{
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.video{
+    margin: auto;
+    position: absolute;
+    top: 50px;
+    left: 30px;
+}
+iframe.container{
+    position: absolute;
+    top: 0px;
+}
+img.banderole{
+    position:relative;
+    bottom: 75px;;
+    left: 335px;
+    z-index: 1;
+}

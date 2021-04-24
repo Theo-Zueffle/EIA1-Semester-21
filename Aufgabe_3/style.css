@@ -1,0 +1,112 @@
+
+body {
+background-image: url("bg.png");
+background-position: left top;
+background-size: auto;
+font-family: sans-serif;
+}
+
+a {
+  background: black;  
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  padding: 5px;
+  margin: 2px;
+}
+li{  
+    display: inline;
+   
+}
+ul{
+    position: absolute;
+    left: 900px;
+    top: 28px;
+    position: fixed;   
+}
+.topnav a:link{
+    color:white;
+}
+.topnav a:hover{
+    color:green;
+}
+.topnav a.active{
+    color: red;
+} 
+
+h1, h2, h3{
+    color: white;  
+}
+h1{
+    font: weight 900px; 
+    position: absolute;
+    top: -130px;
+    left:290px;
+    font-size: 200px;
+    letter-spacing: -20px;
+}
+h2{
+    font-size: 50px;
+    position: absolute;
+    top: 180px;
+    left: 580px;
+}
+h3{
+    font-size: 20px;
+    position: absolute;
+    top: 280px;
+    left: 580px;
+}
+h4{
+    color: brown;
+    font-size: 25px;
+    font-weight: lighter;
+}
+h5{
+    color: lightslategray;
+    font-size: 10px;
+}
+#oben {
+    width: 800px;
+    height: 380px ;
+    margin: auto;
+    border-radius: 0px 0px 480px 480px;
+    background-color: maroon;
+}
+#unten {
+    width: 800px;
+    height: 380px ;
+    margin: auto;  
+    color: brown;
+}
+#box {
+    width: 300px;
+    height: 30px;
+    color: white;
+    background-color: gray;
+    border: 0px;
+}
+#nachricht {
+    width: 300px;
+    height: 80px;
+    color: white;
+    background-color: gray;
+    border: 0px;
+    font-size: 15px;
+}
+#senden {
+    width: 100px;
+    height: 20px;
+    color: white;
+    background-color: gray;
+    border: 0px;
+}
+#facebook {
+    position: relative; 
+    background-color: maroon;
+    top: 295px;
+    left: 345px;
+}
+#facebook:hover{
+    opacity: 0.7;
+}
