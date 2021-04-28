@@ -1,4 +1,6 @@
-/* Werte werden initialisiert */
+/*-------------------  V A R I A B L E N -- G L O B A L  ----------------------------------------*/
+
+/* Werte werden initialisiert GLOBAL*/
 var EmiAfrica18    : number =  1235.5;
 var EmiSoAmerica18 : number =  1261.5;
 var EmiEuropa18    : number =  4209.3;
@@ -13,138 +15,117 @@ var EmiNoAmerica08 : number =  6600.4;
 var EmiAsia08      : number = 12954.7;
 var EmiAustralia08 : number =  1993.0;
 
-/* Variablen, die mit den Werten der einzelnen Kontinenten gefüllt werden */
-var Kontinent  : string;
-var Emission18 : number;
-var Emission08 : number;
+/* Übergabe für myFunction  */
+var Kontinent      :string;
+var Emission08     :number;
+var Emission18     :number;
 
-/* Gesamtsummen für 08 und 18*/
+/* Ausgabe, die errechnet wird zur Anzeige pro Kontinent*/
+var GeProzWelt    : any;
+var VergleichProz : any;
+var VergleichKG   : any;
+
+/* Gesamtsummen für 08 und 18 */
 var Gesamt18 : number;
 var Gesamt08 : number;
 Gesamt18 = EmiAfrica18 + EmiSoAmerica18 + EmiEuropa18 +  EmiNoAmerica18 + EmiAsia18 + EmiAustralia18;
 Gesamt08 = EmiAfrica08 + EmiSoAmerica08 + EmiEuropa08 +  EmiNoAmerica08 + EmiAsia08 + EmiAustralia08;
 
-/* Ausgabe, die errechnet wird*/
-var GeProzWelt    : number;
-var VergleichProz : number;
-var VergleichKG   : number;
 
-/* Ausgabe für Europa */
-/* ------------------ */
-Kontinent   = "Europa";
-Emission18  =  EmiEuropa18;
-Emission08  =  EmiEuropa08;
+/*-------------------  F U N K T I O N E N  -------------------------------------------------*/
+/*alle weiße Bilder werden geladen und Balkendiagramm auf Null */
+function initFunction(){
+    document.querySelector(".asia").setAttribute("src","images/asia.png");
+    document.querySelector(".europe").setAttribute("src","images/europe.png");
+    document.querySelector(".southamerica").setAttribute("src","images/southamerica.png");
+    document.querySelector(".northamerica").setAttribute("src","images/northamerica.png");
+    document.querySelector(".africa").setAttribute("src","images/africa.png");
+    document.querySelector(".australia").setAttribute("src","images/australia.png");
+    /* Balkendiagramm leeren */
+    document.querySelector(".australia").setAttribute("src","images/australia.png");
+}
 
-/* Dieser Bereich wird immer wiederholt pro Kontinent */
-GeProzWelt    = Emission18 * 100 / Gesamt18;
-VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
-VergleichKG   = Emission18 - Emission08;
+/* Allgemeine Funktion zur Berechnung der Werte */
+function myFunction(Kontinent:string, Emission18:any, Emission08:number) {
+    initFunction();
+    GeProzWelt    = Emission18 * 100 / Gesamt18;
+    VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
+    VergleichKG   = Emission18 - Emission08;
+    
+    document.querySelector("h1").innerHTML="Carbon Dioxide Emissions in " + Kontinent; 
+    document.querySelector("h2").innerHTML=" "; 
+    document.querySelector(".Feld1 p").innerHTML= "Emission absolute of " + Kontinent  + " in 2018";
+    document.querySelector(".Feld1 h2").innerHTML = Emission18;
+    document.querySelector(".Feld2 p").innerHTML= "Relative to total world's emission";
+    document.querySelector(".Feld2 h2").innerHTML = GeProzWelt.toFixed(1) + " %";
+    document.querySelector(".Feld3 p").innerHTML= "Growth rate between 2008 and 2018 (in %)";
+    document.querySelector(".Feld3 h2").innerHTML = VergleichProz.toFixed(1) + " %";
+    document.querySelector(".Feld4 p").innerHTML="Growth rate between 2008 and 2018 (absolute)";
+    document.querySelector(".Feld4 h2").innerHTML = VergleichKG.toFixed(1);
+    document.querySelector(".chartWrapper .chart").setAttribute("style","height:" + GeProzWelt + "%");
+}
+/* Funktion zur Übergabe der Europawerte und Aufruf von myFunction */
+function myEuropa(){
+    Kontinent = "Europe";
+    Emission18 = EmiEuropa18;
+    Emission08 = EmiEuropa08;
+    myFunction("Europe", EmiEuropa18, EmiEuropa08);
+    /* Bild wird dunkelgrün */   
+    document.querySelector(".europe").setAttribute("src","images/europe_g.png");
+    
+}
+/* Funktion zur Übergabe der Südamerika-Werte und Aufruf von myFunction */
+function mySoAmerica(){
+    Kontinent = "South America";
+    Emission18 = EmiSoAmerica18;
+    Emission08 = EmiSoAmerica08;
+    myFunction("South America", EmiSoAmerica18, EmiSoAmerica08);
+     /* Bild wird dunkelgrün */ 
+    document.querySelector(".southamerica").setAttribute("src","images/southamerica_g.png");
+}
+/* Funktion zur Übergabe der Nordamerika-Werte und Aufruf von myFunction */
+function myNoAmerica(){
+    Kontinent = "North America";
+    Emission18 = EmiNoAmerica18;
+    Emission08 = EmiNoAmerica08;
+    myFunction("North America", EmiNoAmerica18, EmiNoAmerica08);
+     /* Bild wird dunkelgrün */ 
+    document.querySelector(".northamerica").setAttribute("src","images/northamerica_g.png");
+}
+/* Funktion zur Übergabe der Afrika-Werte und Aufruf von myFunction */
+function myAfrica(){
+    Kontinent = "Africa";
+    Emission18 = EmiAfrica18;
+    Emission08 = EmiAfrica08;
+    myFunction("Africa", EmiAfrica18, EmiAfrica08);
+     /* Bild wird dunkelgrün */ 
+    document.querySelector(".africa").setAttribute("src","images/africa_g.png");
+}
+/* Funktion zur Übergabe der Australien-Werte und Aufruf von myFunction */
+function myAustralia(){
+    Kontinent = "Australia";
+    Emission18 = EmiAustralia18;
+    Emission08 = EmiAustralia08;
+    myFunction("Australia", EmiAustralia18, EmiAustralia08);
+     /* Bild wird dunkelgrün */ 
+    document.querySelector(".australia").setAttribute("src","images/australia_g.png");
+}
+/* Funktion zur Übergabe der Asien-Werte und Aufruf von myFunction */
+function myAsia(){
+    Kontinent = "Asia";
+    Emission18 = EmiAsia18;
+    Emission08 = EmiAsia08;
+    myFunction("Asia", EmiAsia18, EmiAsia08);
+     /* Bild wird dunkelgrün */ 
+    document.querySelector(".asia").setAttribute("src","images/asia_g.png");
+}
 
-console.log('  ' + Kontinent);
-console.log('-------------');
-console.log('Die Emission von ' + Kontinent + ' ist: ' + Emission18 + ' kg CO2.'); 
-console.log('Relativ zur Gesamtemission der Welt verursacht ' + Kontinent + ' damit ' + GeProzWelt.toFixed(2) + ' %.');
-console.log('Für ' + Kontinent + ' hat sich 2018 im Vergleich zu 2008 die Emission um ' + VergleichProz.toFixed(2) + ' % verändert.');
-console.log('2018 im Vergleich zu 2008 sind das ' + VergleichKG.toFixed(1) + ' kg CO2.');
-console.log(' ');
-/* ----------------------------- */
-
-/* Ausgabe für Africa */
-/* ------------------ */
-Kontinent   = "Afrika";
-Emission18  =  EmiAfrica18;
-Emission08  =  EmiAfrica08;
-
-/* Dieser Bereich wird immer wiederholt pro Kontinent */
-GeProzWelt    = Emission18 * 100 / Gesamt18;
-VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
-VergleichKG   = Emission18 - Emission08;
-
-console.log('  ' + Kontinent);
-console.log('-------------');
-console.log('Die Emission von ' + Kontinent + ' ist: ' + Emission18 + ' kg CO2.'); 
-console.log('Relativ zur Gesamtemission der Welt verursacht ' + Kontinent + ' damit ' + GeProzWelt.toFixed(2) + ' %.');
-console.log('Für ' + Kontinent + ' hat sich 2018 im Vergleich zu 2008 die Emission um ' + VergleichProz.toFixed(2) + ' % verändert.');
-console.log('2018 im Vergleich zu 2008 sind das ' + VergleichKG.toFixed(1) + ' kg CO2.');
-console.log(' ');
-/* ----------------------------- */
-
-/* Ausgabe für Asien */
-/* ------------------ */
-Kontinent   = "Asien";
-Emission18  =  EmiAsia18;
-Emission08  =  EmiAsia08;
-
-/* Dieser Bereich wird immer wiederholt pro Kontinent */
-GeProzWelt    = Emission18 * 100 / Gesamt18;
-VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
-VergleichKG   = Emission18 - Emission08;
-
-console.log('  ' + Kontinent);
-console.log('-------------');
-console.log('Die Emission von ' + Kontinent + ' ist: ' + Emission18 + ' kg CO2.'); 
-console.log('Relativ zur Gesamtemission der Welt verursacht ' + Kontinent + ' damit ' + GeProzWelt.toFixed(2) + ' %.');
-console.log('Für ' + Kontinent + ' hat sich 2018 im Vergleich zu 2008 die Emission um ' + VergleichProz.toFixed(2) + ' % verändert.');
-console.log('2018 im Vergleich zu 2008 sind das ' + VergleichKG.toFixed(1) + ' kg CO2.');
-console.log(' ');
-/* ----------------------------- */
-
-/* Ausgabe für Nordamerika */
-/* ------------------ */
-Kontinent   = "Nordamerika";
-Emission18  =  EmiNoAmerica18;
-Emission08  =  EmiNoAmerica08;
-
-/* Dieser Bereich wird immer wiederholt pro Kontinent */
-GeProzWelt    = Emission18 * 100 / Gesamt18;
-VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
-VergleichKG   = Emission18 - Emission08;
-
-console.log('  ' + Kontinent);
-console.log('-------------');
-console.log('Die Emission von ' + Kontinent + ' ist: ' + Emission18 + ' kg CO2.'); 
-console.log('Relativ zur Gesamtemission der Welt verursacht ' + Kontinent + ' damit ' + GeProzWelt.toFixed(2) + ' %.');
-console.log('Für ' + Kontinent + ' hat sich 2018 im Vergleich zu 2008 die Emission um ' + VergleichProz.toFixed(2) + ' % verändert.');
-console.log('2018 im Vergleich zu 2008 sind das ' + VergleichKG.toFixed(1) + ' kg CO2.');
-console.log(' ');
-/* ----------------------------- */
-
-/* Ausgabe für Südamerika */
-/* ------------------ */
-Kontinent   = "Südamerika";
-Emission18  =  EmiSoAmerica18;
-Emission08  =  EmiSoAmerica08;
-
-/* Dieser Bereich wird immer wiederholt pro Kontinent */
-GeProzWelt    = Emission18 * 100 / Gesamt18;
-VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
-VergleichKG   = Emission18 - Emission08;
-
-console.log('  ' + Kontinent);
-console.log('-------------');
-console.log('Die Emission von ' + Kontinent + ' ist: ' + Emission18 + ' kg CO2.'); 
-console.log('Relativ zur Gesamtemission der Welt verursacht ' + Kontinent + ' damit ' + GeProzWelt.toFixed(2) + ' %.');
-console.log('Für ' + Kontinent + ' hat sich 2018 im Vergleich zu 2008 die Emission um ' + VergleichProz.toFixed(2) + ' % verändert.');
-console.log('2018 im Vergleich zu 2008 sind das ' + VergleichKG.toFixed(1) + ' kg CO2.');
-console.log(' ');
-/* ----------------------------- */
-
-/* Ausgabe für Australien */
-/* ------------------ */
-Kontinent   = "Australien";
-Emission18  =  EmiAustralia18;
-Emission08  =  EmiAustralia08;
-
-/* Dieser Bereich wird immer wiederholt pro Kontinent */
-GeProzWelt    = Emission18 * 100 / Gesamt18;
-VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
-VergleichKG   = Emission18 - Emission08;
-
-console.log('  ' + Kontinent);
-console.log('-------------');
-console.log('Die Emission von ' + Kontinent + ' ist: ' + Emission18 + ' kg CO2.'); 
-console.log('Relativ zur Gesamtemission der Welt verursacht ' + Kontinent + ' damit ' + GeProzWelt.toFixed(2) + ' %.');
-console.log('Für ' + Kontinent + ' hat sich 2018 im Vergleich zu 2008 die Emission um ' + VergleichProz.toFixed(2) + ' % verändert.');
-console.log('2018 im Vergleich zu 2008 sind das ' + VergleichKG.toFixed(1) + ' kg CO2.');
-console.log(' ');
-/* ----------------------------- */
+/* abwarten bis Browser alle DOM-Elemente geparst hat */
+window.addEventListener('load', function(){
+    document.querySelector(".europe").addEventListener('click', myEuropa);
+    document.querySelector(".northamerica").addEventListener('click', myNoAmerica);
+    document.querySelector(".southamerica").addEventListener('click', mySoAmerica);
+    document.querySelector(".africa").addEventListener('click', myAfrica);
+    document.querySelector(".australia").addEventListener('click', myAustralia);
+    document.querySelector(".asia").addEventListener('click', myAsia);
+});
