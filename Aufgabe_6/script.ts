@@ -15,11 +15,6 @@ var EmiNoAmerica08 : number =  6600.4;
 var EmiAsia08      : number = 12954.7;
 var EmiAustralia08 : number =  1993.0;
 
-/* Übergabe für myFunction  */
-var Kontinent      :string;
-var Emission08     :number;
-var Emission18     :number;
-
 /* Ausgabe, die errechnet wird zur Anzeige pro Kontinent*/
 var GeProzWelt    : any;
 var VergleichProz : any;
@@ -45,8 +40,8 @@ function initFunction(){
     document.querySelector(".australia").setAttribute("src","images/australia.png");
 }
 
-/* Allgemeine Funktion zur Berechnung der Werte */
-function myFunction(Kontinent:string, Emission18:any, Emission08:number) {
+/* Allgemeine Funktion zur Berechnung der Werte und Ausgabe*/
+function myFunction(Kontinent:string, Emission18:any, Emission08:number, Knoten:string) {
     initFunction();
     GeProzWelt    = Emission18 * 100 / Gesamt18;
     VergleichProz = (Emission18 - Emission08) * 100 / Emission08;
@@ -63,69 +58,16 @@ function myFunction(Kontinent:string, Emission18:any, Emission08:number) {
     document.querySelector(".Feld4 p").innerHTML="Growth rate between 2008 and 2018 (absolute)";
     document.querySelector(".Feld4 h2").innerHTML = VergleichKG.toFixed(1);
     document.querySelector(".chartWrapper .chart").setAttribute("style","height:" + GeProzWelt + "%");
-}
-/* Funktion zur Übergabe der Europawerte und Aufruf von myFunction */
-function myEuropa(){
-    Kontinent = "Europe";
-    Emission18 = EmiEuropa18;
-    Emission08 = EmiEuropa08;
-    myFunction("Europe", EmiEuropa18, EmiEuropa08);
-    /* Bild wird dunkelgrün */   
-    document.querySelector(".europe").setAttribute("src","images/europe_g.png");
-    
-}
-/* Funktion zur Übergabe der Südamerika-Werte und Aufruf von myFunction */
-function mySoAmerica(){
-    Kontinent = "South America";
-    Emission18 = EmiSoAmerica18;
-    Emission08 = EmiSoAmerica08;
-    myFunction("South America", EmiSoAmerica18, EmiSoAmerica08);
-     /* Bild wird dunkelgrün */ 
-    document.querySelector(".southamerica").setAttribute("src","images/southamerica_g.png");
-}
-/* Funktion zur Übergabe der Nordamerika-Werte und Aufruf von myFunction */
-function myNoAmerica(){
-    Kontinent = "North America";
-    Emission18 = EmiNoAmerica18;
-    Emission08 = EmiNoAmerica08;
-    myFunction("North America", EmiNoAmerica18, EmiNoAmerica08);
-     /* Bild wird dunkelgrün */ 
-    document.querySelector(".northamerica").setAttribute("src","images/northamerica_g.png");
-}
-/* Funktion zur Übergabe der Afrika-Werte und Aufruf von myFunction */
-function myAfrica(){
-    Kontinent = "Africa";
-    Emission18 = EmiAfrica18;
-    Emission08 = EmiAfrica08;
-    myFunction("Africa", EmiAfrica18, EmiAfrica08);
-     /* Bild wird dunkelgrün */ 
-    document.querySelector(".africa").setAttribute("src","images/africa_g.png");
-}
-/* Funktion zur Übergabe der Australien-Werte und Aufruf von myFunction */
-function myAustralia(){
-    Kontinent = "Australia";
-    Emission18 = EmiAustralia18;
-    Emission08 = EmiAustralia08;
-    myFunction("Australia", EmiAustralia18, EmiAustralia08);
-     /* Bild wird dunkelgrün */ 
-    document.querySelector(".australia").setAttribute("src","images/australia_g.png");
-}
-/* Funktion zur Übergabe der Asien-Werte und Aufruf von myFunction */
-function myAsia(){
-    Kontinent = "Asia";
-    Emission18 = EmiAsia18;
-    Emission08 = EmiAsia08;
-    myFunction("Asia", EmiAsia18, EmiAsia08);
-     /* Bild wird dunkelgrün */ 
-    document.querySelector(".asia").setAttribute("src","images/asia_g.png");
+    /*Ausgabe des grünen Bildes*/
+    document.querySelector("." + Knoten).setAttribute("src","images/"+ Knoten +"_g.png");
 }
 
 /* abwarten bis Browser alle DOM-Elemente geparst hat */
 window.addEventListener('load', function(){
-    document.querySelector(".europe").addEventListener('click', myEuropa);
-    document.querySelector(".northamerica").addEventListener('click', myNoAmerica);
-    document.querySelector(".southamerica").addEventListener('click', mySoAmerica);
-    document.querySelector(".africa").addEventListener('click', myAfrica);
-    document.querySelector(".australia").addEventListener('click', myAustralia);
-    document.querySelector(".asia").addEventListener('click', myAsia);
+    document.querySelector(".europe").addEventListener('click', function () { myFunction("Europa",EmiEuropa18,EmiEuropa08,"europe")});
+    document.querySelector(".northamerica").addEventListener('click', function () { myFunction("North Amerika",EmiNoAmerica18,EmiNoAmerica08,"northamerica")});
+    document.querySelector(".southamerica").addEventListener('click', function () { myFunction("South America",EmiSoAmerica18,EmiSoAmerica08,"southamerica")});
+    document.querySelector(".africa").addEventListener('click', function (){ myFunction("Africa",EmiAfrica18,EmiAfrica08,"africa")});
+    document.querySelector(".australia").addEventListener('click', function(){ myFunction("Australia",EmiAustralia18,EmiAustralia08,"australia")});
+    document.querySelector(".asia").addEventListener('click', function(){ myFunction("Asia",EmiAsia18,EmiAsia08,"asia")});
 });
