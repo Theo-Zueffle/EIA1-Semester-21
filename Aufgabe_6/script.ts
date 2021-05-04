@@ -63,7 +63,7 @@ function myFunction(Kontinent:string, Emission18:any, Emission08:number, Knoten:
 }
 
 /* abwarten bis Browser alle DOM-Elemente geparst hat */
-window.addEventListener('load', function(){
+window.addEventListener('load', function() {
     document.querySelector(".europe").addEventListener('click', function () { myFunction("Europa",EmiEuropa18,EmiEuropa08,"europe")});
     document.querySelector(".northamerica").addEventListener('click', function () { myFunction("North Amerika",EmiNoAmerica18,EmiNoAmerica08,"northamerica")});
     document.querySelector(".southamerica").addEventListener('click', function () { myFunction("South America",EmiSoAmerica18,EmiSoAmerica08,"southamerica")});
