@@ -63,4 +63,11 @@ html, body {
     background: linear-gradient(10deg,#ffc400, 80%, #fce59a);
 }
 .play {
-   
+    position:absolute;
+    left:45%;
+    top: 500px;
+    cursor: pointer;
+}
+div h1{
+    color: black;
+}

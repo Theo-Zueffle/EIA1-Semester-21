@@ -77,4 +77,27 @@ function useKey(key) {
             break;
         case "g":
         case "G":
-            document.que
+            document.querySelector("#KeyG").setAttribute("style", "color: white");
+            sounds[3].play();
+            break;
+        default:
+            break;
+    }
+}
+/* abwarten bis Browser alle DOM-Elemente geparst hat */
+window.addEventListener('load', function () {
+    document.querySelector("#but0").addEventListener('click', function () { playSample("but0"); });
+    document.querySelector("#but1").addEventListener('click', function () { playSample("but1"); });
+    document.querySelector("#but2").addEventListener('click', function () { playSample("but2"); });
+    document.querySelector("#but3").addEventListener('click', function () { playSample("but3"); });
+    document.querySelector("#but4").addEventListener('click', function () { playSample("but4"); });
+    document.querySelector("#but5").addEventListener('click', function () { playSample("but5"); });
+    document.querySelector("#but6").addEventListener('click', function () { playSample("but6"); });
+    document.querySelector("#but7").addEventListener('click', function () { playSample("but7"); });
+    document.querySelector("#but8").addEventListener('click', function () { playSample("but8"); });
+    /* Aufgabe 7.2 Play-button*/
+    document.querySelector(".play").addEventListener('click', playBeat);
+    /* Early Bird */
+    document.querySelector("body").addEventListener('keydown', function (event) { useKey(event.key); });
+});
+//# sourceMappingURL=script.js.map
