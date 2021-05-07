@@ -1,0 +1,66 @@
+html, body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+    box-sizing :border-box;
+}
+.drumpad{
+    position:absolute;
+    left:30%;
+    top: 20px;
+}
+.button {
+    position: absolute;
+    padding: 2px;
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    border:2px solid #0000;
+    cursor:pointer;
+}
+#but0{
+    left:0px;  
+    top: 0px;
+    background: linear-gradient(10deg,#4682f1, 90%, #b1c7ee);  
+}
+#but1{
+    left:165px;  
+    top: 0px;
+    background: linear-gradient(10deg,#4682f1, 90%, #b1c7ee);
+}
+#but2{
+    left:330px;  
+    top: 0px;
+    background: linear-gradient(10deg,#4682f1, 90%, #b1c7ee);
+}
+#but3{
+    left:0px;  
+    top: 165px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#but4{
+    left:165px;  
+    top: 165px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#but5{
+    left:330px;  
+    top: 165px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#but6{
+    left:0px;  
+    top: 330px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#but7{
+    left:165px;  
+    top: 330px;
+    background: linear-gradient(10deg,#ffc400, 80%, #fce59a);
+}
+#but8{
+    left:330px;  
+    top: 330px;
+    background: linear-gradient(10deg,#ffc400, 80%, #fce59a);
+}
+.play {
+   
