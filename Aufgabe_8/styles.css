@@ -1,0 +1,116 @@
+html, body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+    box-sizing :border-box;
+}
+.drumpad{
+    position:absolute;
+    left:30%;
+    top: 20px;
+}
+.button {
+    position: absolute;
+    padding: 2px;
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    border:2px solid #0000;
+    cursor:pointer;
+}
+
+#sound0{
+    left:0px;  
+    top: 0px;
+    background: linear-gradient(10deg,#4682f1, 90%, #b1c7ee);  
+}
+#sound0:hover{ 
+    opacity: 40%;   
+    transition: all .2s ease-out;
+}
+#sound1{
+    left:165px;  
+    top: 0px;
+    background: linear-gradient(10deg,#4682f1, 90%, #b1c7ee);
+}
+#sound1:hover{  
+    opacity: 40%;     
+    transition: all .2s ease-out;
+}
+#sound2{
+    left:330px;  
+    top: 0px;
+    background: linear-gradient(10deg,#4682f1, 90%, #b1c7ee);
+}
+#sound2:hover{   
+    opacity: 40%;    
+    transition: all .2s ease-out;
+}
+#sound3{
+    left:0px;  
+    top: 165px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#sound3:hover{ 
+    opacity: 40%;      
+    transition: all .2s ease-out;
+}
+#sound4{
+    left:165px;  
+    top: 165px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#sound4:hover{   
+    opacity: 40%;    
+    transition: all .2s ease-out;
+}
+#sound5{
+    left:330px;  
+    top: 165px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#sound5:hover{    
+    opacity: 40%;   
+    transition: all .2s ease-out;
+}
+#sound6{
+    left:0px;  
+    top: 330px;
+    background: linear-gradient(10deg,#ff0077, 80%, #f8b0d2);
+}
+#sound6:hover{  
+    opacity: 40%;     
+    transition: all .2s ease-out;
+}
+#sound7{
+    left:165px;  
+    top: 330px;
+    background: linear-gradient(10deg,#ffc400, 80%, #fce59a);
+}
+#sound7:hover{  
+    opacity: 40%;     
+    transition: all .2s ease-out;
+}
+#sound8{
+    left:330px;  
+    top: 330px;
+    background: linear-gradient(10deg,#ffc400, 80%, #fce59a);
+}
+#sound8:hover{   
+    opacity: 40%;    
+    transition: all .2s ease-out;
+}
+
+i {
+    color: white;
+    width: 80px;
+    position: relative;
+    left: 41%;
+    top: 550px;
+    font-size: 48px;
+}
+#Icon1:hover,
+#Icon2:hover,
+#Icon3:hover{
+    font-size: 60px;
+    transition: all .2s ease-out;
+}
