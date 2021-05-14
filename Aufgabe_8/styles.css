@@ -104,13 +104,21 @@ i {
     color: white;
     width: 80px;
     position: relative;
-    left: 41%;
+    left: 37%;
     top: 550px;
     font-size: 48px;
 }
 #Icon1:hover,
 #Icon2:hover,
-#Icon3:hover{
+#Icon3:hover,
+#Icon4:hover{
     font-size: 60px;
     transition: all .2s ease-out;
+}
+h1 {
+    position: relative;
+    color: white;
+    font-size: 14px;
+    top: 550px;
+    left:57%;
 }
