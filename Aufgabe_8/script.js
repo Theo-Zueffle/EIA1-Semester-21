@@ -14,11 +14,13 @@ var sounds = [sound0, sound1, sound2, sound3, sound4, sound5, sound6, sound7, so
 var beat = [sound4, sound5, sound8];
 var aufnahme;
 var index;
+var myVar;
 function playSample(idFeld) {
     /*-------------------------------------------- */
     idFeld.play();
     /* Bei Aufnahme wird das Element hinzugefügt*/
     if (aufnahme == true) {
+        console.log("aufnahme: " + aufnahme);
         beat.push(idFeld);
     }
 }
@@ -63,6 +65,7 @@ function loesch() {
     /* Array wird geleert*/
     for (index = beat.length; index > 0; index--) {
         beat.pop();
+        console.log("loeschen");
     }
 }
 function remix() {

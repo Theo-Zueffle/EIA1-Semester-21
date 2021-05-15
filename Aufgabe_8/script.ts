@@ -16,6 +16,7 @@ var sounds:   HTMLAudioElement[] = [sound0, sound1, sound2, sound3, sound4, soun
 var beat:     HTMLAudioElement[] = [sound4, sound5, sound8];
 var aufnahme: boolean;
 var index:    number;
+var myVar:    number;
 
 function playSample( idFeld: HTMLAudioElement) {
 /*-------------------------------------------- */    
@@ -23,6 +24,7 @@ function playSample( idFeld: HTMLAudioElement) {
 
 /* Bei Aufnahme wird das Element hinzugefügt*/    
     if ( aufnahme == true) {
+        console.log("aufnahme: " + aufnahme);
         beat.push(idFeld);
     }
 }
@@ -60,6 +62,7 @@ var recAn  = document.getElementsByClassName ("fas fa-microphone");
 var recAus = document.getElementsByClassName ("fas fa-microphone-slash"); 
 
 /* Toggeln - Aufnahme wird zu Stop Aufnahme und umgekehrt */
+
 if (recAn.length == 1) {
     aufnahme = true;
     loesch(); /* alter Inhalt wird gelöscht*/
@@ -76,6 +79,7 @@ function loesch(){
     /* Array wird geleert*/
     for (index = beat.length; index > 0; index--) {
         beat.pop();
+        console.log("loeschen");
     }
 }
 
