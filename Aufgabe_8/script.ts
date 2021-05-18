@@ -18,46 +18,45 @@ var aufnahme: boolean;
 var index:    number;
 var myVar:    number;
 
-function playSample( idFeld: HTMLAudioElement) {
-/*-------------------------------------------- */    
+function playSample( idFeld: HTMLAudioElement): void {
+/*---------------------------------------------------- */    
     idFeld.play();
 
 /* Bei Aufnahme wird das Element hinzugefügt*/    
     if ( aufnahme == true) {
-        console.log("aufnahme: " + aufnahme);
         beat.push(idFeld);
     }
 }
 
 
 /* Beat mit play-Taste abspielen */
-function playBeat() {
-/*--------------------------------- */  
-    var Play = document.getElementsByClassName ("fas fa-play");
-    var Stop = document.getElementsByClassName ("fas fa-stop");
+function playBeat(): void {
+/*------------------------- */  
+    var play = document.getElementsByClassName ("fas fa-play");
+    var stop = document.getElementsByClassName ("fas fa-stop");
 
 /* Toggeln - Play wird zu Stop <==> Stop wird zu Play */
-    if (Play.length == 1) {
+    if (play.length == 1) {
        document.getElementById("Icon1").className = "fas fa-stop"; 
        myVar = setInterval(myTimer, 50);
     }   
-    else  if (Stop.length == 1) {
+    else  if (stop.length == 1) {
         clearInterval(myVar);
         document.getElementById("Icon1").className = "fas fa-play"; 
         }
 }
 
 
-function myTimer(){
-/*------------------ */    
+function myTimer(): void {
+/*------------------------ */    
     for (index = 0; index < beat.length; index++) {
      playSample(beat[index]);
     }
 }
 
 
-function record(){
-/*------------------- */    
+function record(): void {
+/*----------------------- */    
 var recAn  = document.getElementsByClassName ("fas fa-microphone"); 
 var recAus = document.getElementsByClassName ("fas fa-microphone-slash"); 
 
@@ -74,8 +73,11 @@ if (recAn.length == 1) {
 }   
 
 
-function loesch(){
-/*------------------ */    
+function loesch(): void {
+/*---------------------- */   
+    clearInterval(myVar);
+    document.getElementById("Icon1").className = "fas fa-play";  
+
     /* Array wird geleert*/
     for (index = beat.length; index > 0; index--) {
         beat.pop();
@@ -83,8 +85,8 @@ function loesch(){
     }
 }
 
-function remix() {
-/*---------------- */
+function remix(): void {
+/*---------------------- */
     loesch();
     var min: number;
     var max: number;

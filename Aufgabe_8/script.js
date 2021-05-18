@@ -16,37 +16,36 @@ var aufnahme;
 var index;
 var myVar;
 function playSample(idFeld) {
-    /*-------------------------------------------- */
+    /*---------------------------------------------------- */
     idFeld.play();
     /* Bei Aufnahme wird das Element hinzugefügt*/
     if (aufnahme == true) {
-        console.log("aufnahme: " + aufnahme);
         beat.push(idFeld);
     }
 }
 /* Beat mit play-Taste abspielen */
 function playBeat() {
-    /*--------------------------------- */
-    var Play = document.getElementsByClassName("fas fa-play");
-    var Stop = document.getElementsByClassName("fas fa-stop");
+    /*------------------------- */
+    var play = document.getElementsByClassName("fas fa-play");
+    var stop = document.getElementsByClassName("fas fa-stop");
     /* Toggeln - Play wird zu Stop <==> Stop wird zu Play */
-    if (Play.length == 1) {
+    if (play.length == 1) {
         document.getElementById("Icon1").className = "fas fa-stop";
         myVar = setInterval(myTimer, 50);
     }
-    else if (Stop.length == 1) {
+    else if (stop.length == 1) {
         clearInterval(myVar);
         document.getElementById("Icon1").className = "fas fa-play";
     }
 }
 function myTimer() {
-    /*------------------ */
+    /*------------------------ */
     for (index = 0; index < beat.length; index++) {
         playSample(beat[index]);
     }
 }
 function record() {
-    /*------------------- */
+    /*----------------------- */
     var recAn = document.getElementsByClassName("fas fa-microphone");
     var recAus = document.getElementsByClassName("fas fa-microphone-slash");
     /* Toggeln - Aufnahme wird zu Stop Aufnahme und umgekehrt */
@@ -61,7 +60,9 @@ function record() {
     }
 }
 function loesch() {
-    /*------------------ */
+    /*---------------------- */
+    clearInterval(myVar);
+    document.getElementById("Icon1").className = "fas fa-play";
     /* Array wird geleert*/
     for (index = beat.length; index > 0; index--) {
         beat.pop();
@@ -69,7 +70,7 @@ function loesch() {
     }
 }
 function remix() {
-    /*---------------- */
+    /*---------------------- */
     loesch();
     var min;
     var max;
