@@ -5,21 +5,40 @@ var neuerText;
 /* Eingabe einer neuen Task mit Enter  */
 function FEingabe(key) {
     /*--------------------------------- */
-    var neueAufgabe;
-    console.log(key);
     if (key == "Enter") {
-        neuerText = document.querySelector("#Eingabe").nodeValue;
-        console.log(neuerText);
-        console.log("hier");
-        /*liste.push(Aufgabe);*/
+        neuerText = document.querySelector("#Eingabe").value;
+        var neueAufgabe = {
+            AufText: neuerText,
+            AufErledigt: false
+        };
+        liste.unshift(neueAufgabe);
     }
+    FAusgabe();
 }
-function FneueTask(fText) {
+/*Ausgabe aller Array-Einträge  */
+function FAusgabe() {
+    /*------------------------------*/
+    var iAufgabe;
+    var td1;
+    var td1Text;
+    for (var index = 0; index < liste.length; index++) {
+        iAufgabe = liste[index];
+        td1 = document.createElement("td");
+        neuerText = iAufgabe.AufText;
+        td1Text = document.createTextNode(neuerText);
+        td1.appendChild(td1Text);
+        document.getElementById("tabTask").appendChild(td1);
+    }
+    document.querySelector("h2").innerHTML = liste.length + " in total";
 }
-/*for(let index: number = 0; index < liste.length; index++){
-   ausgabe
-})
-*/
+function FLoeschen() {
+    /*-------------------------- */
+    var index;
+    liste.splice(0, index);
+}
+function FHaken() {
+    /*-----------------------*/
+}
 /* Beat mit play-Taste abspielen */
 /* function playBeat(): void {
 /*------------------------- */
