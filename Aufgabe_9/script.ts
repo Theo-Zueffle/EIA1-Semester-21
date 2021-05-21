@@ -6,15 +6,19 @@ interface Aufgabe {
     AufErledigt: boolean;
 }
 
-let liste: Aufgabe[]; 
+let liste: Aufgabe[];
 let neuerText: string;
 
 /* Eingabe einer neuen Task mit Enter  */
 function FEingabe(key: string): void {
 /*--------------------------------- */ 
+console.log("FEingabe" + liste.length);
 
-if (key == "Enter")  { 
-    neuerText = document.querySelector("#Eingabe").value;
+let input: HTMLInputElement = document.querySelector("#Eingabe");
+neuerText = input.value;
+console.log ("neuerText " + neuerText );
+
+if (key == "Enter")  {
     let neueAufgabe: Aufgabe = {
         AufText: neuerText,
         AufErledigt: false
@@ -30,17 +34,18 @@ FAusgabe();
 function FAusgabe(): void {
 /*------------------------------*/    
 let iAufgabe: Aufgabe;
-let td1: HTMLTableDataCellElement;
-let td1Text: Text;
+console.log("FAusgabe" + liste.length);
+let x: HTMLElement;
+let t: ;
 
 for (let index: number = 0; index < liste.length; index++) {
     iAufgabe = liste[index];
-    td1 = document.createElement("td");
+    x = document.createElement("p");
     neuerText = iAufgabe.AufText;
-    td1Text = document.createTextNode(neuerText);
-    td1.appendChild(td1Text);
+    t = document.createTextNode(neuerText);
+    x.appendChild(t);
 
-    document.getElementById("tabTask").appendChild(td1);
+    document.getElementById("tabRow").appendChild(x);
 
     }
 document.querySelector("h2").innerHTML = liste.length + " in total";
@@ -54,7 +59,17 @@ function FLoeschen(): void {
 }
 
 function FHaken(): void {
-/*-----------------------*/    
+/*-----------------------*/ 
+let iAufgabe: Aufgabe;
+
+if (document.getElementsByClassName ("fas fa-check").length == 1) {
+    document.getElementById("Haken").className = ""; 
+    iAufgabe.AufErledigt = false;
+    }
+else {
+    document.getElementsByClassName ("fas fa-check");
+    iAufgabe.AufErledigt = true;
+    }
 }
 
 /* Beat mit play-Taste abspielen */
@@ -78,6 +93,6 @@ function FHaken(): void {
 
 /* abwarten bis Browser alle DOM-Elemente geparst hat */
 window.addEventListener("load", function () {
-   /* document.querySelector("#Eingabe").addEventListener("input", function() {FneueTask(Text);}); */
+    document.querySelector("#Haken").addEventListener("input", function() {FHaken()});
     document.querySelector("body").addEventListener ("keydown", function (event) {FEingabe(event.key)}); 
 });

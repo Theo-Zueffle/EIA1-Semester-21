@@ -5,8 +5,11 @@ var neuerText;
 /* Eingabe einer neuen Task mit Enter  */
 function FEingabe(key) {
     /*--------------------------------- */
+    console.log("FEingabe" + liste.length);
+    var input = document.querySelector("#Eingabe");
+    neuerText = input.value;
+    console.log("neuerText " + neuerText);
     if (key == "Enter") {
-        neuerText = document.querySelector("#Eingabe").value;
         var neueAufgabe = {
             AufText: neuerText,
             AufErledigt: false
@@ -19,15 +22,16 @@ function FEingabe(key) {
 function FAusgabe() {
     /*------------------------------*/
     var iAufgabe;
-    var td1;
-    var td1Text;
+    console.log("FAusgabe" + liste.length);
+    var x;
+    var t;
     for (var index = 0; index < liste.length; index++) {
         iAufgabe = liste[index];
-        td1 = document.createElement("td");
+        x = document.createElement("p");
         neuerText = iAufgabe.AufText;
-        td1Text = document.createTextNode(neuerText);
-        td1.appendChild(td1Text);
-        document.getElementById("tabTask").appendChild(td1);
+        t = document.createTextNode(neuerText);
+        x.appendChild(t);
+        document.getElementById("tabRow").appendChild(x);
     }
     document.querySelector("h2").innerHTML = liste.length + " in total";
 }
@@ -38,6 +42,15 @@ function FLoeschen() {
 }
 function FHaken() {
     /*-----------------------*/
+    var iAufgabe;
+    if (document.getElementsByClassName("fas fa-check").length == 1) {
+        document.getElementById("Haken").className = "";
+        iAufgabe.AufErledigt = false;
+    }
+    else {
+        document.getElementsByClassName("fas fa-check");
+        iAufgabe.AufErledigt = true;
+    }
 }
 /* Beat mit play-Taste abspielen */
 /* function playBeat(): void {
@@ -58,7 +71,7 @@ function FHaken() {
 } */
 /* abwarten bis Browser alle DOM-Elemente geparst hat */
 window.addEventListener("load", function () {
-    /* document.querySelector("#Eingabe").addEventListener("input", function() {FneueTask(Text);}); */
+    document.querySelector("#Haken").addEventListener("input", function () { FHaken(); });
     document.querySelector("body").addEventListener("keydown", function (event) { FEingabe(event.key); });
 });
 //# sourceMappingURL=script.js.map
