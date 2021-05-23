@@ -1,98 +1,85 @@
+
 /*G L O B A L E Variablen                         */
 /*------------------------------------------------*/
-
 interface Aufgabe {
     AufText:     string;
     AufErledigt: boolean;
 }
-
-let liste: Aufgabe[];
-let neuerText: string;
+var neueAufgabe: Aufgabe;
+var neuerText: string;
+var total: number = 0;
 
 /* Eingabe einer neuen Task mit Enter  */
 function FEingabe(key: string): void {
 /*--------------------------------- */ 
-console.log("FEingabe" + liste.length);
+var x1: HTMLElement;
+var x2: HTMLElement;
+var zeile: HTMLElement;
+var t: Text;
+var att: Attr;
 
-let input: HTMLInputElement = document.querySelector("#Eingabe");
+let input: HTMLInputElement = document.querySelector(".Eingabe");
 neuerText = input.value;
-console.log ("neuerText " + neuerText );
 
 if (key == "Enter")  {
-    let neueAufgabe: Aufgabe = {
+    input.value = "";
+
+    neueAufgabe = {
         AufText: neuerText,
         AufErledigt: false
     };
-    liste.unshift(neueAufgabe);
-    }
+    
+    /*eine Zeile <div> mit Klasse ToDoListe anlegen */
+    console.log ("div angelegt");
+    zeile = document.createElement("div");
+    document.body.appendChild(zeile);
+    zeile.className = "ToDoListe";
 
-FAusgabe();
+    /* input checkbox hinzufügen */
+    x1 = document.createElement("input");
+    x1.className = "Haken";
+    x1.setAttribute("type", "checkbox");
+    zeile.appendChild(x1);
 
-}  
-
-/*Ausgabe aller Array-Einträge  */ 
-function FAusgabe(): void {
-/*------------------------------*/    
-let iAufgabe: Aufgabe;
-console.log("FAusgabe" + liste.length);
-let x: HTMLElement;
-let t: ;
-
-for (let index: number = 0; index < liste.length; index++) {
-    iAufgabe = liste[index];
-    x = document.createElement("p");
-    neuerText = iAufgabe.AufText;
+    /* p hinzufügen  */
+    x2 = document.createElement("p");
+    neuerText = neueAufgabe.AufText;
     t = document.createTextNode(neuerText);
-    x.appendChild(t);
+    x2.appendChild(t);
+    zeile.appendChild(x2);
+    
 
-    document.getElementById("tabRow").appendChild(x);
+    /* Mülleimer hinzufügen */
+    // tslint:disable-next-line: typedef
+    var x3 = document.createElement("div");
+    x3.className = "fas fa-trash-alt";
+    zeile.appendChild(x3);
+    
+    /* total errechnen */
+    total++;
+    document.querySelector("h2").innerHTML = total + " in total";
 
+    /*Eingabe leeren */
+    document.querySelector("#idEingabe").setAttribute("value" , "");
+    /*var x4: HTMLElement = document.getElementById("idEingabe");
+    x4.setAttribute("value", " ");*/
     }
-document.querySelector("h2").innerHTML = liste.length + " in total";
-} 
-
-function FLoeschen(): void {
-/*-------------------------- */    
-    let index: number;
-
-    liste.splice(0, index);
+x3.addEventListener("click", function() { FMuell(x3)}) ;
 }
-
-function FHaken(): void {
+ 
+function FMuell(x3: HTMLDivElement): void {
 /*-----------------------*/ 
-let iAufgabe: Aufgabe;
-
-if (document.getElementsByClassName ("fas fa-check").length == 1) {
-    document.getElementById("Haken").className = ""; 
-    iAufgabe.AufErledigt = false;
-    }
-else {
-    document.getElementsByClassName ("fas fa-check");
-    iAufgabe.AufErledigt = true;
-    }
+console.log ("Muell");
+let parent: HTMLElement = x3.parentElement;
+console.log(parent);
+parent.remove();
+total--;
+document.querySelector("h2").innerHTML = total + " in total";
 }
-
-/* Beat mit play-Taste abspielen */
-/* function playBeat(): void {
-/*------------------------- */  
-/*
-    var play = document.getElementsByClassName ("fas fa-play");
-    var stop = document.getElementsByClassName ("fas fa-stop");
-
-/* Toggeln - Play wird zu Stop <==> Stop wird zu Play */
- /*   if (play.length == 1) {
-       document.getElementById("Icon1").className = "fas fa-stop"; 
-       myVar = setInterval(myTimer, 50);
-    }   
-    else  if (stop.length == 1) {
-        clearInterval(myVar);
-        document.getElementById("Icon1").className = "fas fa-play"; 
-        }
-} */
-
 
 /* abwarten bis Browser alle DOM-Elemente geparst hat */
 window.addEventListener("load", function () {
-    document.querySelector("#Haken").addEventListener("input", function() {FHaken()});
-    document.querySelector("body").addEventListener ("keydown", function (event) {FEingabe(event.key)}); 
-});
+   document.querySelector("body").addEventListener ("keydown", function (event) {FEingabe(event.key) }); 
+   });
+
+   

@@ -1,0 +1,65 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: lightgrey;
+    height: 100%;
+    display: inline-flex;
+    flex-direction: column;
+}
+h1{
+    position: relative;
+    color: black;
+    text-align: center;
+    left: 30%;
+}
+h2{
+    position: relative;
+    color: darkgrey;
+    text-align: center;
+    left: 30%;
+}
+   
+.ToDoListe {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+  
+    position: relative;
+    left: 30%;
+    background-color: white;
+    font-size: 20px;
+    width: 400px;
+    height: 70px;
+    color:black;
+    padding: 5px;
+    box-shadow: 5px 5px gray;  
+}    
+.Eingabe{
+    position: relative;
+    background-color: white;
+    left: 30%;
+    font-size: 20px;
+    width: 400px;
+    height: 50px;
+    color:darkgrey;
+}
+.Haken{
+    width: 20px;
+    height: 20px;
+}
+
+.task{
+    color: black;
+}
+
+.fa-trash-alt{
+    color: darkgrey;
+    opacity: 0%;
+    transition: all 0.4s ease-out;
+}
+.fa-trash-alt:hover{
+    cursor: pointer;
+    color: black;
+    opacity: 100%;
+}
+
