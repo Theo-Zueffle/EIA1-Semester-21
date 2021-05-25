@@ -4,8 +4,9 @@ var total = 0;
 /* Eingabe einer neuen Task mit Enter  */
 function FEingabe(key) {
     /*--------------------------------- */
-    var x1;
-    var x2;
+    var hakenIcon;
+    var textP;
+    var trashIcon;
     var zeile;
     var t;
     var att;
@@ -23,35 +24,30 @@ function FEingabe(key) {
         document.body.appendChild(zeile);
         zeile.className = "ToDoListe";
         /* input checkbox hinzufügen */
-        x1 = document.createElement("input");
-        x1.className = "Haken";
-        x1.setAttribute("type", "checkbox");
-        zeile.appendChild(x1);
+        hakenIcon = document.createElement("input");
+        hakenIcon.className = "Haken";
+        hakenIcon.setAttribute("type", "checkbox");
+        zeile.appendChild(hakenIcon);
         /* p hinzufügen  */
-        x2 = document.createElement("p");
+        textP = document.createElement("p");
         neuerText = neueAufgabe.AufText;
         t = document.createTextNode(neuerText);
-        x2.appendChild(t);
-        zeile.appendChild(x2);
+        textP.appendChild(t);
+        zeile.appendChild(textP);
         /* Mülleimer hinzufügen */
-        // tslint:disable-next-line: typedef
-        var x3 = document.createElement("div");
-        x3.className = "fas fa-trash-alt";
-        zeile.appendChild(x3);
+        trashIcon = document.createElement("div");
+        trashIcon.className = "fas fa-trash-alt";
+        zeile.appendChild(trashIcon);
         /* total errechnen */
         total++;
         document.querySelector("h2").innerHTML = total + " in total";
-        /*Eingabe leeren */
-        document.querySelector("#idEingabe").setAttribute("value", "");
-        /*var x4: HTMLElement = document.getElementById("idEingabe");
-        x4.setAttribute("value", " ");*/
     }
-    x3.addEventListener("click", function () { FMuell(x3); });
+    trashIcon.addEventListener("click", function () { FMuell(trashIcon); });
 }
-function FMuell(x3) {
+function FMuell(trashIcon) {
     /*-----------------------*/
     console.log("Muell");
-    var parent = x3.parentElement;
+    var parent = trashIcon.parentElement;
     console.log(parent);
     parent.remove();
     total--;

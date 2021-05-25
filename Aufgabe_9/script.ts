@@ -12,8 +12,10 @@ var total: number = 0;
 /* Eingabe einer neuen Task mit Enter  */
 function FEingabe(key: string): void {
 /*--------------------------------- */ 
-var x1: HTMLElement;
-var x2: HTMLElement;
+var hakenIcon: HTMLElement;
+var textP: HTMLElement;
+var trashIcon: HTMLDivElement;
+
 var zeile: HTMLElement;
 var t: Text;
 var att: Attr;
@@ -36,41 +38,34 @@ if (key == "Enter")  {
     zeile.className = "ToDoListe";
 
     /* input checkbox hinzufügen */
-    x1 = document.createElement("input");
-    x1.className = "Haken";
-    x1.setAttribute("type", "checkbox");
-    zeile.appendChild(x1);
+    hakenIcon = document.createElement("input");
+    hakenIcon.className = "Haken";
+    hakenIcon.setAttribute("type", "checkbox");
+    zeile.appendChild(hakenIcon);
 
     /* p hinzufügen  */
-    x2 = document.createElement("p");
+    textP = document.createElement("p");
     neuerText = neueAufgabe.AufText;
     t = document.createTextNode(neuerText);
-    x2.appendChild(t);
-    zeile.appendChild(x2);
+    textP.appendChild(t);
+    zeile.appendChild(textP);
     
-
     /* Mülleimer hinzufügen */
-    // tslint:disable-next-line: typedef
-    var x3 = document.createElement("div");
-    x3.className = "fas fa-trash-alt";
-    zeile.appendChild(x3);
+    trashIcon = document.createElement("div");
+    trashIcon.className = "fas fa-trash-alt";
+    zeile.appendChild(trashIcon);
     
     /* total errechnen */
     total++;
     document.querySelector("h2").innerHTML = total + " in total";
-
-    /*Eingabe leeren */
-    document.querySelector("#idEingabe").setAttribute("value" , "");
-    /*var x4: HTMLElement = document.getElementById("idEingabe");
-    x4.setAttribute("value", " ");*/
     }
-x3.addEventListener("click", function() { FMuell(x3)}) ;
+trashIcon.addEventListener("click", function(): void {FMuell(trashIcon); } );
 }
  
-function FMuell(x3: HTMLDivElement): void {
+function FMuell(trashIcon: HTMLDivElement): void {
 /*-----------------------*/ 
 console.log ("Muell");
-let parent: HTMLElement = x3.parentElement;
+let parent: HTMLElement = trashIcon.parentElement;
 console.log(parent);
 parent.remove();
 total--;
@@ -78,8 +73,8 @@ document.querySelector("h2").innerHTML = total + " in total";
 }
 
 /* abwarten bis Browser alle DOM-Elemente geparst hat */
-window.addEventListener("load", function () {
-   document.querySelector("body").addEventListener ("keydown", function (event) {FEingabe(event.key) }); 
+window.addEventListener("load", function (): void {
+   document.querySelector("body").addEventListener ("keydown", function (event: KeyboardEvent): void {FEingabe(event.key); }); 
    });
 
    
