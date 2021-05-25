@@ -41,8 +41,8 @@ function FEingabe(key) {
         /* total errechnen */
         total++;
         document.querySelector("h2").innerHTML = total + " in total";
+        trashIcon.addEventListener("click", function () { FMuell(trashIcon); });
     }
-    trashIcon.addEventListener("click", function () { FMuell(trashIcon); });
 }
 function FMuell(trashIcon) {
     /*-----------------------*/

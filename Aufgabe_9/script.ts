@@ -58,8 +58,10 @@ if (key == "Enter")  {
     /* total errechnen */
     total++;
     document.querySelector("h2").innerHTML = total + " in total";
+
+    trashIcon.addEventListener("click", function(): void {FMuell(trashIcon); } );
     }
-trashIcon.addEventListener("click", function(): void {FMuell(trashIcon); } );
+
 }
  
 function FMuell(trashIcon: HTMLDivElement): void {
