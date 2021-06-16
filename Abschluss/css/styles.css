@@ -1,0 +1,21 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgba(215, 215, 215);
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+footer {
+    font-size: 12px;
+    text-align: right;
+}
+.square{
+    size: 30px;
+    width: 30px;
+    height: 35px;
+}
+
+.Spielfeld {
+    position: relative;
+}
