@@ -1,4 +1,4 @@
-
+/* G L O B A L E    V A R I A B L E N */
 var schwerDOMElement: HTMLInputElement;
 var domSpielfeld:     HTMLElement; 
 var domFeld:          HTMLElement;
@@ -10,6 +10,9 @@ var punkteMensch:     number;
 var punkteComp:       number;
 var anzahlCol:        number;
 var anzahlRow:        number;
+var indexFeld:        number;
+var runden:           number;
+var zaehlRunden:      number = 0;
 
 interface Feld {
     column:   number;
@@ -17,10 +20,11 @@ interface Feld {
     Mensch:   boolean;
     Computer: boolean;
 }
+var elementFeld: Feld[];
 var feld: Feld[] = [];
 /*
- * Sobald der DOM geladen wurde können grundlegende DOM-Interaktionen
- * initialisiert werden
+ * Welcher Schwierigkeitsgrad wird gewählt, Übergabe von Anzahl Runden (falls mal unterschiedlich zu Spalten)
+ * und Anzahl Spalten
  */
 window.addEventListener("load", function(): void {
     schwerDOMElement = document.querySelector("#leicht");
@@ -36,218 +40,181 @@ window.addEventListener("load", function(): void {
     schwerDOMElement = document.querySelector("#schwer");
     schwerDOMElement.addEventListener("click", function(): void {
         wie_schwer (5 , 5);
-    });
+    });   
+    //drawSpielfeld();
 });
+
+function drawSpielfeld(): void {
+    let zaehlerBr: number = 0;
+
+    domSpielfeld = document.getElementById("Spielfeld");
+    domSpielfeld.innerHTML = "";
+    absatz = document.createElement("br");
+    domSpielfeld.appendChild(absatz);
+
+
+    for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
+        let indFeld: string = indexFeld.toString();
+
+        domFeld = document.createElement("button"); 
+        domFeld.setAttribute("class" , "Feld");
+        domFeld.setAttribute("id" , indFeld);
+
+        console.log ("index: " + indexFeld);
+        console.log ("Feld Computer: " + feld[indexFeld].Computer);
+        console.log ("Feld Mensch: " + feld[indexFeld].Mensch);
+        console.log ("");
+
+        if (feld[indexFeld].Computer == true) { 
+            domFeld.innerHTML = "<i class='fas fa-times'></i>";
+            domFeld.setAttribute("disabled" , "true"); 
+            
+        } else if (feld[indexFeld].Mensch  == true) { 
+            domFeld.innerHTML = "<i class='fas fa-circle'></i>"; 
+            domFeld.setAttribute("disabled" , "true");
+
+        }   else { domFeld.innerHTML = "<i class='fas square'></i>"; }
+        
+        domSpielfeld.appendChild(domFeld);
+        // Hilfe hier: Wo muss man den eventListener plazieren, damit er hört?
+        domElement = document.querySelector(".Feld");
+        domElement.addEventListener("click", function (): void { 
+            menschSpielt(indexFeld);
+        }); 
+
+        zaehlerBr++;
+        if (zaehlerBr == anzahlCol) {
+            absatz = document.createElement("br");
+            domSpielfeld.appendChild(absatz);
+            zaehlerBr = 0;
+        }
+    }
+}
 
 function wie_schwer (runden: number, colRow: number): void {
   
     anzahlCol    = colRow;
     anzahlRow    = colRow;
-    feld.length  = (colRow * colRow);
 
+    /* Die Eingabe des Schwierigkeitsgrads wird gesperrt */
     domElement = document.getElementById ("fieldset");
     domElement.setAttribute("disabled" , "true");
 
+    /* Hinweis geben */
     domElement = document.getElementById ("hinweis");
-    domElement.innerHTML = "Du bist am Zug";
-   
-    domSpielfeld = document.createElement("div");
-    domSpielfeld.classList.add("Spielfeld");
-    document.body.appendChild(domSpielfeld);
+    domElement.innerHTML = "du bist am Zug";
 
+    /* erste Runde anzeigen */
     domElement = document.getElementById ("Runde");
     domElement.innerHTML = "Runde 1 von " + runden;
-        
+    zaehlRunden++;
+    
+    /* Schleifen: es wird für jedes Feld ein Array erzeugt, das
+    *  die Koordinaten von Spalte und Zeile enthält */
     for (let indexCol: number = 1 ; indexCol <= colRow; indexCol++) {
-
-        absatz = document.createElement("br");
-        domSpielfeld.appendChild(absatz);
-        console.log (absatz);
-
         for (let indexRow: number = 1; indexRow <= colRow; indexRow++) {
-
-            let idFeld: string;
-            idFeld = "Feld" + indexCol + indexRow;
-            console.log(idFeld);
-            domFeld = document.createElement("button"); 
-            domFeld.setAttribute("id" , idFeld);
-            domFeld.innerHTML = "<i class='fas square'></i>";
-            domSpielfeld.appendChild(domFeld);
-            console.log(domFeld);
                 /* Feld anlegen im Array */
             feld.push({
                 column:   indexCol,
-                 row:      indexRow,
-                 Mensch:   false,
+                row:      indexRow,
+                Mensch:   false,
                 Computer: false
             });
         }
-    }    
-    
-    footer = document.createElement("footer");
-    footer.innerHTML = "Theo Züffle, MatrikelNr: 268027";
-    domElement = document.body;
-    domElement.appendChild(footer);
-
+    }  
     computerSpielt();
 }
 
 function computerSpielt(): void {
-    console.log ("computer spielt");
-    let min: number = 1;
-    let max: number = anzahlCol;
-    let indCol: number = Math.floor((Math.random() * max) + min);
-    let indRow: number = Math.floor((Math.random() * max) + min);
+    console.log ("Computer spielt");
+    // es wird ein Array-Index gesucht
+    let min: number = 0;
+    let max: number = (anzahlCol * anzahlRow) - 1;
+    indexFeld = Math.floor((Math.random() * max) + min);
    
-    feld = [
-        {
-        column:   indCol,
-        row:      indRow,
-        Mensch:   false,
-        Computer: true
-        }
-    ];
-    let feldName: string = "Feld" + indRow + indCol;
-    console.log(feldName);
-
-    domElement = document.getElementById("Feld" + indRow + indCol);
-    console.log(domElement);
-   // domElement.innerHTML = "<i class='fas times'></i>";
+    //Index des neuen Feldes wird gesucht und geprüft, ob es noch frei ist
+    sucheFeld (indexFeld);
+    // Feld-Ausprägung Computer wird auf true gesetzt
+    feld[indexFeld].Computer = true;
+    drawSpielfeld();
+ //   gewonnen();
 }
 
-
-function drawListToDOM(): void {
-    // alle todos erst einmal aus dem DOM löschen
-    //todosDOMElement.innerHTML = "";
-
-    // das ToDo-Array durchlaufen (iterieren) und Todo für Todo in den DOM schreiben
-    //for (let index: number = 0; index < aufgabe.length; index++) {
-  //  for (let index: number = (aufgabe.length - 1); index >= 0; index--) {
-        /**
-         * Neues DIV-Element erstellen (würde auch mit innerHTML = "<div class='todo'></div>" gehen, 
-         * die Objekt-Instansierung ist aber übersichtlicher)
-         */
-     //   let todo: HTMLElement = document.createElement("div");
-     //   todo.classList.add("todo");
-
-        /**
-         * Jedes Todo besteht aus etwas Markup, also aus HTML-Elementen
-         * wie der Check-Anzeige, dem ToDo-Text und dem Mülleimer
-         * 
-         * Einfachheitshalber werden hier alle HTML-Elemente für ein ToDo
-         * nicht DOM-Objekt-weise (wie oben, mit createElement), sondern als eine lange
-         * HTML-Zeichenkette erstellt. An manchen Stellen der Zeichenkette wird
-         * ein Wert einer Variablen benötigt (bspw. für die CSS Klasse oder für den ToDo-Text),
-         * hier muss die Zeichenkette unterbrochen werden.
-         */
-    //    todo.innerHTML =  "<span class='check " + aufgabe[index].todosChecked + "'><i class='fas fa-check'></i></span>"
-    //                        + aufgabe[index].todosText +
-    //                        "<span class='trash fas fa-trash-alt'></span>";
-
-        // Zuweisen der Event-Listener für den Check- und den Trash-Button
-     //   todo.querySelector(".check").addEventListener("click", function(): void {
-            // hier wird der Index, also die aktuelle Stelle im Array dieses ToDos,
-            // übergeben, damit an der entsprechenden Stelle im Array der Wert geändert werden kann.
-     //       toggleCheckState(index);
-     //   });
-     //   todo.querySelector(".trash").addEventListener("click", function(): void {
-            // hier wird der Index, also die aktuelle Stelle im Array dieses ToDos,
-            // übergeben, damit die entsprechende Stelle im Array gelöscht werden kann.
-     //       deleteTodo(index);
-     //   });
-
-        // Bis hier hin wurde das neue Todo "zusammengebaut", jetzt wird es in den DOM gerendert.
-     //   todosDOMElement.appendChild(todo);
-   // }
-
-    //updateCounter();
-}
-
-function updateCounter(): void {
- //   counterDOMElement.innerHTML = aufgabe.length + " in total";
-}
-
-/**
- * Ein neues ToDo wird folgendermaßen erstellt:
- */
-function addTodo(): void {
-    /**
-     * Zunächst wird geprüft, ob das Input-Feld nicht leer ist
-     * (ansonsten würde ein leerer ToDo-Text erstellt werden,
-     * wenn man, ohne zu Tippen, den Add-Button gedrückt hätte)
-     */
-    //if (inputDOMElement.value != "") {
-        /**
-         * Der Eingabe-Wert aus dem Input-Feld (.value) wird 
-         * als neues Element in das ToDo-Array gepusht.
-         * Gleichzeitig wird in ein zweites Array, das den Checked- / Uncheck-
-         * Status der ToDos abbildet, für dieses ToDo (weil selbe Stelle im Array)
-         * der Status "unchecked", hier false, gepusht.
-         */
-     //   aufgabe.push({
-     //       todosText: inputDOMElement.value,
-     //       todosChecked: false
-     //   });
-
-        /*todosText.push(inputDOMElement.value);
-        todosChecked.push(false);*/
-        
-        // Jetzt wird der Text aus dem Eingabefeld gelöscht
-        //inputDOMElement.value = "";
-
-        /**
-         * Die zentrale Funktion, um die Liste des ToDo-Arrays in den DOM zu rendern
-         * wird wieder getriggert
-         */
-        //drawListToDOM();
+function sucheFeld(indexFeld: number): void {
+    console.log ("sucheFeld Index " + indexFeld);
+    if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+        console.log (" GEFUNDEN sucheFeld index " + indexFeld);
+       } 
+       // wird kein passendes Array gefunden, werden neue Zahlen gesucht
+       else(computerSpielt() );     
     }
 
+function menschSpielt(indexFeld: number): void {
+    console.log("Mensch spielt Index " + indexFeld);
+    
+    //Index des neuen Feldes wird gesucht und geprüft, ob es noch frei ist
+    sucheFeld (indexFeld);
+    // Feld-Ausprägung Computer wird auf true gesetzt
+    feld[indexFeld].Mensch = true;
+    drawSpielfeld();
+    gewonnen();
 
-/**
- * Der check- / unchecked Zustand eines ToDo wird wie folgt gesetzt:
- */
-function toggleCheckState(index: number): void {
-
-    /**
-     * Das Array, , das den Checked- / Uncheck-Status der ToDos abbildet,
-     * muss an jener Stelle, an der das entsprechende ToDo steht (nämlich
-     * an der übergebenen Index-Stelle) geändert werden.
-     * Von checked zu unchecked bzw. von unchecked zu checked
-     * Hier wird ein Boolean für den Zustand checked/unchecked genutzt,
-     * der Boolean muss also von true zu false bzw. false zu true gestellt werden.
-     * Ein toggle (also Welchseln zwischen zwei Zuständen) lässt sich folgendermaßen
-     * kurz schreiben: wert = !wert
-     * Bedeutet: der Wert soll das Gegenteil von seinem Wert annehmen.
-     * Alternativ könnte man hier natürlich auch andere Schreibweisen (wie sie im
-     * Kurs behandelt wurden) nutzen.
-     */
- //   aufgabe[index].todosChecked = !aufgabe[index].todosChecked;
-
-    /**
-     * Die zentrale Funktion, um die Liste des ToDo-Arrays in den DOM zu rendern
-     * wird wieder getriggert
-     */
-   // drawListToDOM();
 }
 
-/**
- * Diese Funktion löscht ein ToDo
- */
-function deleteTodo(index: number): void {
-    /**
-     * Durch "index" ist die entsprechende Stelle im Array
-     * bekannt, an der das ToDo steht.
-     * Jetzt muss diese Stelle beider Arrays gelöscht werden,
-     * das ToDo-Text-Array und das Checked/Unchecked-Array
-     */
-//    aufgabe.splice(index, 1);
+function gewonnen(): void {
+    console.log ("Function GEWONNEN");
+    
+    let gewonnenMensch:   boolean = true;
+    let gewonnenComputer: boolean = true;
+    // für jede Spalte wird geschaut, ob es nur Mensch, oder nur Computer gibt,
+    // falls nicht - nicht gewonnen
+    for (let indexCol: number = 1; indexCol <= anzahlCol; indexCol++) {
+        for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
+        
+            if (feld[indexFeld].column == indexCol) {
+                if (feld[indexFeld].Mensch == true) {
+                    gewonnenComputer = false;
+                }
+            }
+            if (feld[indexFeld].column == indexCol) {
+                if (feld[indexFeld].Computer == true) {
+                    gewonnenMensch = false;
+                }
+            }
+            if (feld[indexFeld].column == indexCol) {
+                if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false ) {
+                    gewonnenMensch   = false;
+                    gewonnenComputer = false;
+                }
+            }
+        }
+    }        
 
-   /* todosText.splice(index, 1);
-    todosChecked.splice(index, 1);
-    */
-    /**
-     * Die zentrale Funktion, um die Liste des ToDo-Arrays in den DOM zu rendern
-     * wird wieder getriggert
-     */
-   // drawListToDOM();
+    if (gewonnenComputer == true) {
+        punkteComp++;     
+      /* Hinweis geben */
+        domElement = document.getElementById ("hinweis");
+        domElement.innerHTML = "Computer hat diese Runde gewonnen!";
+        domElement = document.getElementById("weiter");
+        domElement.innerHTML = "nächste Runde";
+        runden++;
+        if (runden > zaehlRunden) {
+            domElement = document.getElementById ("Sieger");
+            domElement.innerHTML = "Computer ist Sieger!"; 
+        }
+    }
+
+    if (gewonnenMensch == true) {
+        punkteMensch++;     
+      /* Hinweis geben */
+        domElement = document.getElementById ("hinweis");
+        domElement.innerHTML = "Du hast diese Runde gewonnen!";
+        domElement = document.getElementById("weiter");
+        domElement.innerHTML = "nächste Runde";
+        runden++;
+        if (runden > zaehlRunden) {
+            domElement = document.getElementById ("Sieger");
+            domElement.innerHTML = "Du bist der Sieger!"; 
+        }
+    }
 }

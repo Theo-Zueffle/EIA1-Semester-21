@@ -7,13 +7,21 @@ body {
 }
 
 footer {
-    font-size: 12px;
+    font-size: 10px;
     text-align: right;
+}
+.fa-times, 
+.fa-circle {
+    font-size: 25px;
+    size: 30px;
+    width: 30px;
+    height: 35px;
 }
 .square{
     size: 30px;
     width: 30px;
     height: 35px;
+    cursor:pointer;
 }
 
 .Spielfeld {
