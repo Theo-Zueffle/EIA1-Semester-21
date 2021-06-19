@@ -12,6 +12,8 @@ var anzahlRow;
 var indexFeld;
 var runden;
 var zaehlRunden = 0;
+var gewonnenMensch;
+var gewonnenComputer;
 var elementFeld;
 var feld = [];
 /*
@@ -35,6 +37,7 @@ window.addEventListener("load", function () {
 });
 function drawSpielfeld() {
     var zaehlerBr = 0;
+    var domElementSF;
     domSpielfeld = document.getElementById("Spielfeld");
     domSpielfeld.innerHTML = "";
     absatz = document.createElement("br");
@@ -60,10 +63,12 @@ function drawSpielfeld() {
             domFeld.innerHTML = "<i class='fas square'></i>";
         }
         domSpielfeld.appendChild(domFeld);
-        // Hilfe hier: Wo muss man den eventListener plazieren, damit er hört?
-        domElement = document.querySelector(".Feld");
-        domElement.addEventListener("click", function () {
-            menschSpielt(indexFeld);
+        // Hilfe hier: Es kommen immer alle Elemente zurück und nicht das eine, dass geclickt wurde
+        // Hab es mit button und .Feld ausprobiert
+        domElementSF = document.querySelector("button");
+        domElementSF.addEventListener("click", function (event) {
+            console.log("Event: " + event.target);
+            //menschSpielt(indexFeld);
         });
         zaehlerBr++;
         if (zaehlerBr == anzahlCol) {
@@ -72,6 +77,10 @@ function drawSpielfeld() {
             zaehlerBr = 0;
         }
     }
+}
+function ermittleFeldGeclickt(ziel) {
+    var value = ziel.button;
+    console.log("Target: " + value + "wurde geklickt");
 }
 function wie_schwer(runden, colRow) {
     anzahlCol = colRow;
@@ -134,8 +143,8 @@ function menschSpielt(indexFeld) {
 }
 function gewonnen() {
     console.log("Function GEWONNEN");
-    var gewonnenMensch = true;
-    var gewonnenComputer = true;
+    gewonnenMensch = true;
+    gewonnenComputer = true;
     // für jede Spalte wird geschaut, ob es nur Mensch, oder nur Computer gibt,
     // falls nicht - nicht gewonnen
     for (var indexCol = 1; indexCol <= anzahlCol; indexCol++) {
@@ -158,6 +167,86 @@ function gewonnen() {
             }
         }
     }
+    // in der  Spalte hat keiner gewonnen, deshalb in der Zeile suchen
+    if (gewonnenComputer == false && gewonnenMensch == false) {
+        gewonnenComputer = true;
+        gewonnenMensch = true;
+        // für jede Zeile wird geschaut, ob es nur Mensch, oder nur Computer gibt,
+        // falls nicht - nicht gewonnen
+        for (var indexRow = 1; indexRow <= anzahlRow; indexRow++) {
+            for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
+                if (feld[indexFeld].row == indexRow) {
+                    if (feld[indexFeld].Mensch == true) {
+                        gewonnenComputer = false;
+                    }
+                }
+                if (feld[indexFeld].row == indexRow) {
+                    if (feld[indexFeld].Computer == true) {
+                        gewonnenMensch = false;
+                    }
+                }
+                if (feld[indexFeld].row == indexRow) {
+                    if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+                        gewonnenMensch = false;
+                        gewonnenComputer = false;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        ausgabeGewonnen();
+    }
+    // in der  Zeile hat keiner gewonnen, deshalb in der Diagonalen suchen (row = column)
+    if (gewonnenComputer == false && gewonnenMensch == false) {
+        gewonnenComputer = true;
+        gewonnenMensch = true;
+        for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
+            if (feld[indexFeld].column == feld[indexFeld].row) {
+                if (feld[indexFeld].Computer == true) {
+                    gewonnenMensch = false;
+                }
+                if (feld[indexFeld].Mensch == true) {
+                    gewonnenComputer = false;
+                }
+                if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+                    gewonnenMensch = false;
+                    gewonnenComputer = false;
+                }
+            }
+        }
+    }
+    else {
+        ausgabeGewonnen();
+    }
+    // in der  Zeile hat keiner gewonnen, deshalb in der Diagonalen suchen (anzahlrow-- // anzahlcolumn ++)
+    if (gewonnenComputer == false && gewonnenMensch == false) {
+        gewonnenComputer = true;
+        gewonnenMensch = true;
+        var zaehlerRow = anzahlCol;
+        var zaehlerCol = 1;
+        for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
+            if (feld[indexFeld].column == anzahlCol) {
+                if (feld[indexFeld].Computer == true) {
+                    gewonnenMensch = false;
+                }
+                if (feld[indexFeld].Mensch == true) {
+                    gewonnenComputer = false;
+                }
+                if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+                    gewonnenMensch = false;
+                    gewonnenComputer = false;
+                }
+            }
+            zaehlerCol--;
+            zaehlerRow++;
+        }
+    }
+    else {
+        ausgabeGewonnen();
+    }
+}
+function ausgabeGewonnen() {
     if (gewonnenComputer == true) {
         punkteComp++;
         /* Hinweis geben */

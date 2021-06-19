@@ -1,15 +1,41 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: rgba(215, 215, 215);
+    background-image: url("./shattered-island.gif");
+    background-size: auto;
     width: 500px;
     margin: 0 auto;
     text-align: center;
 }
-
 footer {
-    font-size: 10px;
-    text-align: right;
+    position: absolute;
+    bottom: 50px;
+    color: darkorange;
+    font-size: 15px;
+    text-align: center;
 }
+h1{
+color: darkorange;
+font-size: 50px;
+}
+h2{
+    color: red;
+    font-size: 20px;
+}
+h3{
+    color: red;
+    font-size: 20px;
+}
+label{
+    color: white;
+}
+input:checked + label{
+    color: red;
+}
+
+p{
+    color: white;
+}
+
 .fa-times, 
 .fa-circle {
     font-size: 25px;
