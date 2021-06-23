@@ -1,13 +1,11 @@
-/* G L O B A L E    V A R I A B L E N */
-var schwerDOMElement: HTMLInputElement;
+//var schwerDOMElement: HTMLInputElement;
 var domSpielfeld:     HTMLElement; 
-var domFeld:          HTMLElement;
 var absatz:           HTMLElement;
-var footer:           HTMLElement;
 var domElement:       HTMLElement;
+var compSpielt:       boolean;
 
-var punkteMensch:     number;
-var punkteComp:       number;
+var punkteMensch:     number = 0;
+var punkteComp:       number = 0;
 var anzahlCol:        number;
 var anzahlRow:        number;
 var indexFeld:        number;
@@ -16,6 +14,8 @@ var zaehlRunden:      number = 0;
 
 var gewonnenMensch:   boolean;
 var gewonnenComputer: boolean;
+var unentschieden:    boolean;
+var rGewonnen:        boolean = false;
 
 interface Feld {
     column:   number;
@@ -26,10 +26,13 @@ interface Feld {
 var elementFeld: Feld[];
 var feld: Feld[] = [];
 /*
- * Welcher Schwierigkeitsgrad wird gewählt, Übergabe von Anzahl Runden (falls mal unterschiedlich zu Spalten)
- * und Anzahl Spalten
+ * Welcher Schwierigkeitsgrad wird gewählt, Übergabe von Anzahl Runden (falls mal 
+   unterschiedlich zu Spalten) und Anzahl Spalten
  */
 window.addEventListener("load", function(): void {
+//-----------------------------------------------//    
+    let schwerDOMElement: HTMLInputElement;
+
     schwerDOMElement = document.querySelector("#leicht");
     schwerDOMElement.addEventListener("click", function(): void {
         wie_schwer (3 , 3);
@@ -48,46 +51,72 @@ window.addEventListener("load", function(): void {
 });
 
 function drawSpielfeld(): void {
-    let zaehlerBr:    number = 0;
-    let domElementSF: HTMLElement;
+//------------------------------//
+    let zaehlerBr:      number = 0;
+    let domFeld:        HTMLElement;
+    let footer:         HTMLElement;
+    let domElementSF:   HTMLElement;
+    let domElementI:    HTMLElement;
+    let indexDS:        number;
 
+    // Elemente initialisieren
+    domFeld = document.getElementById("hinweis");
+    domFeld.innerHTML = "";
+    domFeld = document.getElementById("PunkteM");
+    domFeld.innerHTML = "";
+    domFeld = document.getElementById("PunkteC");
+    domFeld.innerHTML = "";
+    domFeld = document.getElementById("weiter");
+    domFeld.innerHTML = "";
     domSpielfeld = document.getElementById("Spielfeld");
+
     domSpielfeld.innerHTML = "";
+
+    // ein Absatz ausgeben
     absatz = document.createElement("br");
     domSpielfeld.appendChild(absatz);
 
+    // jedes Array-Feld wird als button angelegt
+    for (indexDS = 0; indexDS < feld.length; indexDS++) {
+        let indFeld:        string = indexDS.toString();
 
-    for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
-        let indFeld: string = indexFeld.toString();
+        domElementSF = document.createElement("button"); 
+        domElementSF.setAttribute("class" , "Feld");
+        domElementSF.setAttribute("id" , indFeld);
 
-        domFeld = document.createElement("button"); 
-        domFeld.setAttribute("class" , "Feld");
-        domFeld.setAttribute("id" , indFeld);
+        if (feld[indexDS].Computer == true) { 
+            domElementSF.setAttribute("disabled" , "true"); 
+            domSpielfeld.appendChild(domElementSF);
 
-        console.log ("index: " + indexFeld);
-        console.log ("Feld Computer: " + feld[indexFeld].Computer);
-        console.log ("Feld Mensch: " + feld[indexFeld].Mensch);
-        console.log ("");
-
-        if (feld[indexFeld].Computer == true) { 
-            domFeld.innerHTML = "<i class='fas fa-times'></i>";
-            domFeld.setAttribute("disabled" , "true"); 
+            domElementI = document.createElement("i");
+            domElementI.setAttribute("class" , "fas fa-times");
+            domElementI.setAttribute("id" , indFeld);
+            domElementSF.appendChild(domElementI);
             
-        } else if (feld[indexFeld].Mensch  == true) { 
-            domFeld.innerHTML = "<i class='fas fa-circle'></i>"; 
-            domFeld.setAttribute("disabled" , "true");
+        } else if (feld[indexDS].Mensch  == true) { 
+            domElementSF.setAttribute("disabled" , "true");
+            domSpielfeld.appendChild(domElementSF);
 
-        }   else { domFeld.innerHTML = "<i class='fas square'></i>"; }
-        
-        domSpielfeld.appendChild(domFeld);
- // Hilfe hier: Es kommen immer alle Elemente zurück und nicht das eine, dass geclickt wurde
- // Hab es mit button und .Feld ausprobiert
-        domElementSF = document.querySelector("button");
-        domElementSF.addEventListener("click", function (event: Event): void { 
-            console.log ("Event: " + event.target);
-            //menschSpielt(indexFeld);
+            domElementI = document.createElement("i");
+            domElementI.setAttribute("class" , "fas fa-circle"); 
+            domElementI.setAttribute("id" , indFeld);
+            domElementSF.appendChild(domElementI);
+           
+        }   else { 
+            domSpielfeld.appendChild(domElementSF);
+            domElementI = document.createElement("i");
+            domElementI.setAttribute("class" , "fas square"); 
+            domElementI.setAttribute("id" , indFeld);
+            domElementSF.appendChild(domElementI);
+        }
+
+        domElementSF.addEventListener("click", function (event: MouseEvent): void { 
+            let feldId: string = (event.target as HTMLElement).id;
+            console.log ("Event: " + parseInt(feldId));
+           
+            menschSpielt(parseInt(feldId));
         }); 
-
+        //nach jeder Zeile ein br
         zaehlerBr++;
         if (zaehlerBr == anzahlCol) {
             absatz = document.createElement("br");
@@ -95,15 +124,15 @@ function drawSpielfeld(): void {
             zaehlerBr = 0;
         }
     }
-}
-
-function ermittleFeldGeclickt (ziel: MouseEvent): void {
-    let value: number = ziel.button;
-    console.log ("Target: " + value + "wurde geklickt")
+    //Ausgabe des Footers
+    domSpielfeld = document.getElementById("Spielfeld");
+    footer = document.createElement("footer");
+    footer.innerHTML = "Theo Züffle, MatrikelNr: 268027";
+    domSpielfeld.appendChild(footer);
 }
 
 function wie_schwer (runden: number, colRow: number): void {
-  
+//----------------------------------------------------------//  
     anzahlCol    = colRow;
     anzahlRow    = colRow;
 
@@ -137,105 +166,116 @@ function wie_schwer (runden: number, colRow: number): void {
 }
 
 function computerSpielt(): void {
+/*-------------------------------*/  
     console.log ("Computer spielt");
-    // es wird ein Array-Index gesucht
+    compSpielt = true;
+    let indexF: number;
+
+    // es wird ein Array-Index gesucht - random
     let min: number = 0;
     let max: number = (anzahlCol * anzahlRow) - 1;
-    indexFeld = Math.floor((Math.random() * max) + min);
+    indexF = Math.floor(Math.random() * (max - min + 1)) + min;
    
     //Index des neuen Feldes wird gesucht und geprüft, ob es noch frei ist
-    sucheFeld (indexFeld);
+
+    console.log ("Index vor Suche: " + indexF);
+
+    sucheFeld (indexF);
+
+    let showFeld: Feld = feld [indexF];
+    console.log ("Feld:" + showFeld);
+
     // Feld-Ausprägung Computer wird auf true gesetzt
-    feld[indexFeld].Computer = true;
+    feld[indexF].Computer = true;
     drawSpielfeld();
- //   gewonnen();
+    //gewonnen();
 }
 
 function sucheFeld(indexFeld: number): void {
+/*-------------------------------------------*/ 
     console.log ("sucheFeld Index " + indexFeld);
+
     if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
         console.log (" GEFUNDEN sucheFeld index " + indexFeld);
        } 
        // wird kein passendes Array gefunden, werden neue Zahlen gesucht
-       else(computerSpielt() );     
-    }
+       else { computerSpielt(); }   
+}
 
 function menschSpielt(indexFeld: number): void {
+/*--------------------------------------------- */    
     console.log("Mensch spielt Index " + indexFeld);
-    
-    //Index des neuen Feldes wird gesucht und geprüft, ob es noch frei ist
-    sucheFeld (indexFeld);
-    // Feld-Ausprägung Computer wird auf true gesetzt
+    compSpielt = false;
+    // Feld-Ausprägung Mensch wird auf true gesetzt
     feld[indexFeld].Mensch = true;
-    drawSpielfeld();
-    gewonnen();
-
+    //drawSpielfeld();
+    //gewonnen();
+    if (rGewonnen == false) {
+        computerSpielt();
+    }
 }
 
 function gewonnen(): void {
+/*-------------------------- */    
     console.log ("Function GEWONNEN");
     
     gewonnenMensch   = true;
     gewonnenComputer = true;
+    rGewonnen = false;
 
     // für jede Spalte wird geschaut, ob es nur Mensch, oder nur Computer gibt,
     // falls nicht - nicht gewonnen
     for (let indexCol: number = 1; indexCol <= anzahlCol; indexCol++) {
-        for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
+        for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
         
             if (feld[indexFeld].column == indexCol) {
                 if (feld[indexFeld].Mensch == true) {
                     gewonnenComputer = false;
                 }
-            }
-            if (feld[indexFeld].column == indexCol) {
                 if (feld[indexFeld].Computer == true) {
                     gewonnenMensch = false;
                 }
-            }
-            if (feld[indexFeld].column == indexCol) {
-                if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false ) {
-                    gewonnenMensch   = false;
+                if (feld[indexFeld].Mensch == false && feld[indexFeld].Computer == false) {
                     gewonnenComputer = false;
+                    gewonnenMensch   = false;
                 }
             }
         }
-    }    
-    // in der  Spalte hat keiner gewonnen, deshalb in der Zeile suchen
-    if (gewonnenComputer == false && gewonnenMensch == false) {
-        gewonnenComputer = true;
-        gewonnenMensch   = true;
-    
+    // in der  Spalte hat keiner gewonnen, nächste Spalte
+        if (gewonnenComputer == false && gewonnenMensch == false) {
+            gewonnenComputer = true;
+            gewonnenMensch   = true;
+        } else {rGewonnen = true;
+                break; }    
+    }
      // für jede Zeile wird geschaut, ob es nur Mensch, oder nur Computer gibt,
     // falls nicht - nicht gewonnen
+    if (rGewonnen == false) {
         for (let indexRow: number = 1; indexRow <= anzahlRow; indexRow++) {
-            for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
+            for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
         
                 if (feld[indexFeld].row == indexRow) {
                     if (feld[indexFeld].Mensch == true) {
                         gewonnenComputer = false;
                     }
-                }
-                if (feld[indexFeld].row == indexRow) {
                     if (feld[indexFeld].Computer == true) {
                         gewonnenMensch = false;
                     }
-                }
-                if (feld[indexFeld].row == indexRow) {
-                    if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false ) {
-                        gewonnenMensch   = false;
+                    if (feld[indexFeld].Mensch == false && feld[indexFeld].Computer == false) {
                         gewonnenComputer = false;
+                        gewonnenMensch   = false;
                     }
                 }
-            }    
-        }
-    }   else { ausgabeGewonnen(); } 
-
-      // in der  Zeile hat keiner gewonnen, deshalb in der Diagonalen suchen (row = column)
-    if (gewonnenComputer == false && gewonnenMensch == false) {
-        gewonnenComputer = true;
-        gewonnenMensch   = true;
-        
+            }
+            if (gewonnenComputer == false && gewonnenMensch == false) {
+                gewonnenComputer = true;
+                gewonnenMensch   = true;
+            } else {rGewonnen = true; }  
+        }              
+    }   
+/*     
+    
+    if (gewonnen == false) {
         for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
             if (feld[indexFeld].column == feld[indexFeld].row) {
                 if (feld[indexFeld].Computer == true) {
@@ -249,14 +289,15 @@ function gewonnen(): void {
                     gewonnenComputer = false;
                 }
             }
+            if (gewonnenComputer == false && gewonnenMensch == false) {
+                gewonnenComputer = true;
+                gewonnenMensch   = true;
+            } else {gewonnen = true; }  
         }
-    }   else { ausgabeGewonnen(); } 
+    }    
 
     // in der  Zeile hat keiner gewonnen, deshalb in der Diagonalen suchen (anzahlrow-- // anzahlcolumn ++)
-    if (gewonnenComputer == false && gewonnenMensch == false) {
-        gewonnenComputer = true;
-        gewonnenMensch   = true;
-    
+    if (gewonnen == false) {
         let zaehlerRow: number = anzahlCol;
         let zaehlerCol: number = 1;
         for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
@@ -267,26 +308,39 @@ function gewonnen(): void {
                 if (feld[indexFeld].Mensch == true) {
                     gewonnenComputer = false;
                 }
-                if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false ) {
-                    gewonnenMensch   = false;
-                    gewonnenComputer = false;
-                }
             }
+            if (gewonnenComputer == false && gewonnenMensch == false) {
+                gewonnenComputer = true;
+                gewonnenMensch   = true;
+            } else {gewonnen = true; }  
             zaehlerCol--;
             zaehlerRow++;
         }
-    } else { ausgabeGewonnen(); }
-}
-
+    }  
+    if (gewonnen == true) {
+        ausgabeGewonnen();
+    }  */
+} 
 
 function ausgabeGewonnen(): void {
+/*--------------------------------- */    
+    console.log ("Ausgabe gewonnen");
     if (gewonnenComputer == true) {
-        punkteComp++;     
+        punkteComp++;    
+        console.log("Punkte Computer" + punkteComp); 
       /* Hinweis geben */
         domElement = document.getElementById ("hinweis");
         domElement.innerHTML = "Computer hat diese Runde gewonnen!";
+
+        domElement = document.getElementById ("PunkteC");
+        domElement.innerHTML = "Punkte Computer: " + punkteComp; 
+
         domElement = document.getElementById("weiter");
+        domElement.setAttribute("class" , "");
+        domElement.addEventListener("click" , function(): void {nextRound(); }); 
+        domElement.setAttribute("class" , "weiter");
         domElement.innerHTML = "nächste Runde";
+
         runden++;
         if (runden > zaehlRunden) {
             domElement = document.getElementById ("Sieger");
@@ -299,12 +353,26 @@ function ausgabeGewonnen(): void {
       /* Hinweis geben */
         domElement = document.getElementById ("hinweis");
         domElement.innerHTML = "Du hast diese Runde gewonnen!";
-        domElement = document.getElementById("weiter");
-        domElement.innerHTML = "nächste Runde";
+
+        domElement = document.getElementById ("PunkteM");
+        domElement.innerHTML = "Punkte Mensch: " + punkteMensch; 
+
         runden++;
         if (runden > zaehlRunden) {
             domElement = document.getElementById ("Sieger");
             domElement.innerHTML = "Du bist der Sieger!"; 
-        }
+
+            domElement = document.getElementById("weiter");
+            domElement.setAttribute("class" , "");
+            domElement.addEventListener("click" , function(): void {nextRound(); }); 
+        } else {
+            domElement = document.getElementById("weiter");
+            domElement.setAttribute("class" , "weiter");
+            domElement.innerHTML = "nächste Runde"; }
     }    
+}
+
+function nextRound(): void {
+/*------------------------- */    
+    console.log("nächste Runde");
 }

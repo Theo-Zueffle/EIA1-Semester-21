@@ -35,21 +35,52 @@ input:checked + label{
 p{
     color: white;
 }
+.weiter{
+    position: relative;
+    left: 80%;
+    border-radius: 10px ;
+    background-color: orange;
+    width: 100px;
+    height: 40px; 
+    border: 5px solid red; 
+    font-weight: bolder;
+    text-align: center;
+    cursor: pointer;
+}
+.weiter:hover{
+    opacity: 50%;      
+    transition: all .2s ease-out;   
+}
 
-.fa-times, 
-.fa-circle {
+.fa-times,
+.fa-circle { 
     font-size: 25px;
     size: 30px;
     width: 30px;
     height: 35px;
+    margin: 7px;
+    vertical-align: bottom;
 }
 .square{
+   font-size: 25px;
+    border: none;
     size: 30px;
     width: 30px;
     height: 35px;
+    margin: 7px;
     cursor:pointer;
+    vertical-align: bottom;
+}
+
+.square:hover{
+    opacity: 50%;      
+    transition: all .2s ease-out;
 }
 
 .Spielfeld {
     position: relative;
+}
+#Runde {
+    font-weight: bolder ;
+    color: coral;
 }
