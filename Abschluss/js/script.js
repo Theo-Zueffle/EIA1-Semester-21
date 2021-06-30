@@ -1,8 +1,6 @@
-//var schwerDOMElement: HTMLInputElement;
 var domSpielfeld;
 var absatz;
 var domElement;
-var compSpielt;
 var punkteMensch = 0;
 var punkteComp = 0;
 var anzahlCol;
@@ -10,107 +8,40 @@ var anzahlRow;
 var indexFeld;
 var runden;
 var zaehlRunden = 0;
+var feldGefunden = false;
 var gewonnenMensch;
 var gewonnenComputer;
 var unentschieden;
 var rGewonnen = false;
+var rUnentschieden = false;
 var elementFeld;
 var feld = [];
 /*
- * Welcher Schwierigkeitsgrad wird gewählt, Übergabe von Anzahl Runden (falls mal
-   unterschiedlich zu Spalten) und Anzahl Spalten
+ * Welcher Schwierigkeitsgrad wird gewählt, Übergabe von Anzahl Runden und Anzahl Spalten.
+ * Beides ist dieselbe Zahl.
  */
 window.addEventListener("load", function () {
     //-----------------------------------------------//    
     var schwerDOMElement;
     schwerDOMElement = document.querySelector("#leicht");
     schwerDOMElement.addEventListener("click", function () {
-        wie_schwer(3, 3);
+        wie_schwer(3);
     });
     schwerDOMElement = document.querySelector("#mittel");
     schwerDOMElement.addEventListener("click", function () {
-        wie_schwer(4, 4);
+        wie_schwer(4);
     });
     schwerDOMElement = document.querySelector("#schwer");
     schwerDOMElement.addEventListener("click", function () {
-        wie_schwer(5, 5);
+        wie_schwer(5);
     });
-    //drawSpielfeld();
 });
-function drawSpielfeld() {
-    //------------------------------//
-    var zaehlerBr = 0;
-    var domFeld;
-    var footer;
-    var domElementSF;
-    var domElementI;
-    var indexDS;
-    // Elemente initialisieren
-    domFeld = document.getElementById("hinweis");
-    domFeld.innerHTML = "";
-    domFeld = document.getElementById("PunkteM");
-    domFeld.innerHTML = "";
-    domFeld = document.getElementById("PunkteC");
-    domFeld.innerHTML = "";
-    domFeld = document.getElementById("weiter");
-    domFeld.innerHTML = "";
-    domSpielfeld = document.getElementById("Spielfeld");
-    domSpielfeld.innerHTML = "";
-    // ein Absatz ausgeben
-    absatz = document.createElement("br");
-    domSpielfeld.appendChild(absatz);
-    // jedes Array-Feld wird als button angelegt
-    for (indexDS = 0; indexDS < feld.length; indexDS++) {
-        var indFeld = indexDS.toString();
-        domElementSF = document.createElement("button");
-        domElementSF.setAttribute("class", "Feld");
-        domElementSF.setAttribute("id", indFeld);
-        if (feld[indexDS].Computer == true) {
-            domElementSF.setAttribute("disabled", "true");
-            domSpielfeld.appendChild(domElementSF);
-            domElementI = document.createElement("i");
-            domElementI.setAttribute("class", "fas fa-times");
-            domElementI.setAttribute("id", indFeld);
-            domElementSF.appendChild(domElementI);
-        }
-        else if (feld[indexDS].Mensch == true) {
-            domElementSF.setAttribute("disabled", "true");
-            domSpielfeld.appendChild(domElementSF);
-            domElementI = document.createElement("i");
-            domElementI.setAttribute("class", "fas fa-circle");
-            domElementI.setAttribute("id", indFeld);
-            domElementSF.appendChild(domElementI);
-        }
-        else {
-            domSpielfeld.appendChild(domElementSF);
-            domElementI = document.createElement("i");
-            domElementI.setAttribute("class", "fas square");
-            domElementI.setAttribute("id", indFeld);
-            domElementSF.appendChild(domElementI);
-        }
-        domElementSF.addEventListener("click", function (event) {
-            var feldId = event.target.id;
-            console.log("Event: " + parseInt(feldId));
-            menschSpielt(parseInt(feldId));
-        });
-        //nach jeder Zeile ein br
-        zaehlerBr++;
-        if (zaehlerBr == anzahlCol) {
-            absatz = document.createElement("br");
-            domSpielfeld.appendChild(absatz);
-            zaehlerBr = 0;
-        }
-    }
-    //Ausgabe des Footers
-    domSpielfeld = document.getElementById("Spielfeld");
-    footer = document.createElement("footer");
-    footer.innerHTML = "Theo Züffle, MatrikelNr: 268027";
-    domSpielfeld.appendChild(footer);
-}
-function wie_schwer(runden, colRow) {
+function wie_schwer(colRow) {
     //----------------------------------------------------------//  
     anzahlCol = colRow;
     anzahlRow = colRow;
+    runden = colRow;
+    zaehlRunden = 0;
     /* Die Eingabe des Schwierigkeitsgrads wird gesperrt */
     domElement = document.getElementById("fieldset");
     domElement.setAttribute("disabled", "true");
@@ -123,8 +54,8 @@ function wie_schwer(runden, colRow) {
     zaehlRunden++;
     /* Schleifen: es wird für jedes Feld ein Array erzeugt, das
     *  die Koordinaten von Spalte und Zeile enthält */
-    for (var indexCol = 1; indexCol <= colRow; indexCol++) {
-        for (var indexRow = 1; indexRow <= colRow; indexRow++) {
+    for (var indexRow = 1; indexRow <= colRow; indexRow++) {
+        for (var indexCol = 1; indexCol <= colRow; indexCol++) {
             /* Feld anlegen im Array */
             feld.push({
                 column: indexCol,
@@ -134,32 +65,122 @@ function wie_schwer(runden, colRow) {
             });
         }
     }
+    // Spielfeld wird gezeichnet 
+    drawSpielfeld();
+    // der Computer setzt den ersten Stein
     computerSpielt();
+}
+function drawSpielfeld() {
+    //------------------------------//
+    var zaehlerBr = 0;
+    var domFeld;
+    var domElementSF;
+    var domElementI;
+    var indexDS;
+    // Elemente initialisieren
+    //domFeld = document.getElementById("hinweis");
+    //domFeld.innerHTML = "";
+    domFeld = document.getElementById("weiter");
+    domFeld.innerHTML = "";
+    domFeld.setAttribute("class", "");
+    domSpielfeld = document.getElementById("Spielfeld");
+    // Spielfeld löschen
+    domSpielfeld.innerHTML = "";
+    // jedes Array-Feld wird als button angelegt
+    for (indexDS = 0; indexDS < feld.length; indexDS++) {
+        // number to string
+        var indFeld = indexDS.toString();
+        domElementSF = document.createElement("button");
+        domElementSF.setAttribute("class", "Feld");
+        domElementSF.setAttribute("id", "b" + indFeld);
+        domSpielfeld.appendChild(domElementSF);
+        domElementI = document.createElement("i");
+        domElementI.setAttribute("class", "fas square");
+        domElementI.setAttribute("id", indFeld);
+        domElementSF.appendChild(domElementI);
+        // der EventListener hört auf ein button-Feld
+        domElementSF.addEventListener("click", function (event) {
+            var feldId = event.target.id;
+            console.log("feldid: " + feldId);
+            console.log("Event: " + parseInt(feldId));
+            menschSpielt(parseInt(feldId));
+        });
+        //nach jeder Zeile ein br ausgeben
+        zaehlerBr++;
+        if (zaehlerBr == anzahlCol) {
+            absatz = document.createElement("br");
+            domSpielfeld.appendChild(absatz);
+            zaehlerBr = 0;
+        }
+    }
+}
+function drawKreuz(indexDS) {
+    /*---------------------------------------*/
+    /* X für Computer */
+    console.log("drawKreuz " + indexDS);
+    var indexSt = indexDS.toString();
+    //<button>
+    domElement = document.getElementById("b" + indexSt);
+    domElement.setAttribute("disabled", "true");
+    //<i>
+    domElement = document.getElementById(indexSt);
+    domElement.setAttribute("class", "fas fa-times");
+}
+function drawCircle(indexDS) {
+    /*-----------------------------------------*/
+    /* Kreis für Mensch */
+    console.log("drawCircle " + indexDS);
+    var indexSt = indexDS.toString();
+    //<button>
+    domElement = document.getElementById("b" + indexSt);
+    domElement.setAttribute("disabled", "true");
+    //<i> 
+    domElement = document.getElementById(indexSt);
+    domElement.setAttribute("class", "fas fa-circle");
+}
+function drawNeutral(indexDS) {
+    /*-----------------------------------------*/
+    /* Leeres Feld */
+    console.log("drawNeutral " + indexDS);
+    var indexSt = indexDS.toString();
+    //<button>
+    domElement = document.getElementById("b" + indexSt);
+    domElement.removeAttribute("disabled");
+    //<i> 
+    domElement = document.getElementById(indexSt);
+    domElement.setAttribute("class", "fas square");
 }
 function computerSpielt() {
     /*-------------------------------*/
     console.log("Computer spielt");
-    compSpielt = true;
-    var indexF;
-    // es wird ein Array-Index gesucht - random
-    var min = 0;
-    var max = (anzahlCol * anzahlRow) - 1;
-    indexF = Math.floor(Math.random() * (max - min + 1)) + min;
-    //Index des neuen Feldes wird gesucht und geprüft, ob es noch frei ist
-    console.log("Index vor Suche: " + indexF);
-    sucheFeld(indexF);
-    var showFeld = feld[indexF];
-    console.log("Feld:" + showFeld);
-    // Feld-Ausprägung Computer wird auf true gesetzt
-    feld[indexF].Computer = true;
-    drawSpielfeld();
-    //gewonnen();
+    feldGefunden = false;
+    //Sind bereits alle Felder belegt?
+    var alleFelderBelegt = true;
+    for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
+        if (feld[indexFeld].Mensch == false && feld[indexFeld].Computer == false) {
+            alleFelderBelegt = false;
+            break;
+        }
+    }
+    if (alleFelderBelegt == false) {
+        var indexF = void 0;
+        // es wird ein Array-Index gesucht - random
+        var min = 0;
+        var max = (anzahlCol * anzahlRow) - 1;
+        indexF = Math.floor(Math.random() * (max - min + 1)) + min;
+        //Index des neuen Feldes wird gesucht und geprüft, ob es noch frei ist
+        sucheFeld(indexF);
+    }
 }
 function sucheFeld(indexFeld) {
     /*-------------------------------------------*/
     console.log("sucheFeld Index " + indexFeld);
-    if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
-        console.log(" GEFUNDEN sucheFeld index " + indexFeld);
+    if ((feld[indexFeld].Computer == false) && (feld[indexFeld].Mensch == false)) {
+        // Feld-Ausprägung Computer wird auf true gesetzt
+        feld[indexFeld].Computer = true;
+        feld[indexFeld].Mensch = false;
+        drawKreuz(indexFeld);
+        gewonnen();
     }
     // wird kein passendes Array gefunden, werden neue Zahlen gesucht
     else {
@@ -168,22 +189,22 @@ function sucheFeld(indexFeld) {
 }
 function menschSpielt(indexFeld) {
     /*--------------------------------------------- */
-    console.log("Mensch spielt Index " + indexFeld);
-    compSpielt = false;
+    var indexMS = indexFeld;
     // Feld-Ausprägung Mensch wird auf true gesetzt
-    feld[indexFeld].Mensch = true;
-    //drawSpielfeld();
-    //gewonnen();
+    feld[indexMS].Mensch = true;
+    feld[indexMS].Computer = false;
+    drawCircle(indexMS);
+    gewonnen();
     if (rGewonnen == false) {
         computerSpielt();
     }
 }
 function gewonnen() {
     /*-------------------------- */
-    console.log("Function GEWONNEN");
     gewonnenMensch = true;
     gewonnenComputer = true;
     rGewonnen = false;
+    rUnentschieden = false;
     // für jede Spalte wird geschaut, ob es nur Mensch, oder nur Computer gibt,
     // falls nicht - nicht gewonnen
     for (var indexCol = 1; indexCol <= anzahlCol; indexCol++) {
@@ -235,103 +256,148 @@ function gewonnen() {
             }
             else {
                 rGewonnen = true;
+                break;
             }
         }
     }
-    /*
-        
-        if (gewonnen == false) {
-            for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
-                if (feld[indexFeld].column == feld[indexFeld].row) {
-                    if (feld[indexFeld].Computer == true) {
-                        gewonnenMensch = false;
-                    }
-                    if (feld[indexFeld].Mensch == true) {
-                        gewonnenComputer = false;
-                    }
-                    if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false ) {
-                        gewonnenMensch   = false;
-                        gewonnenComputer = false;
-                    }
+    // Diagonale (row und col sind gleich) links oben - rechts unten 
+    if (rGewonnen == false) {
+        for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
+            if (feld[indexFeld].column == feld[indexFeld].row) {
+                if (feld[indexFeld].Computer == true) {
+                    gewonnenMensch = false;
                 }
-                if (gewonnenComputer == false && gewonnenMensch == false) {
-                    gewonnenComputer = true;
-                    gewonnenMensch   = true;
-                } else {gewonnen = true; }
+                if (feld[indexFeld].Mensch == true) {
+                    gewonnenComputer = false;
+                }
+                if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+                    gewonnenMensch = false;
+                    gewonnenComputer = false;
+                }
             }
         }
-    
-        // in der  Zeile hat keiner gewonnen, deshalb in der Diagonalen suchen (anzahlrow-- // anzahlcolumn ++)
-        if (gewonnen == false) {
-            let zaehlerRow: number = anzahlCol;
-            let zaehlerCol: number = 1;
-            for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
-                if (feld[indexFeld].column == anzahlCol) {
-                    if (feld[indexFeld].Computer == true) {
-                        gewonnenMensch = false;
-                    }
-                    if (feld[indexFeld].Mensch == true) {
-                        gewonnenComputer = false;
-                    }
+        if (gewonnenComputer == false && gewonnenMensch == false) {
+            gewonnenComputer = true;
+            gewonnenMensch = true;
+        }
+        else {
+            rGewonnen = true;
+        }
+    }
+    // Diagonalen suchen (anzahlrow-- // anzahlcolumn ++) (rechts oben - links unten ) 
+    if (rGewonnen == false) {
+        var zaehlerRow = 1;
+        var zaehlerCol = anzahlCol;
+        for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
+            if (feld[indexFeld].column == zaehlerCol && feld[indexFeld].row == zaehlerRow) {
+                if (feld[indexFeld].Computer == true) {
+                    gewonnenMensch = false;
                 }
-                if (gewonnenComputer == false && gewonnenMensch == false) {
-                    gewonnenComputer = true;
-                    gewonnenMensch   = true;
-                } else {gewonnen = true; }
+                if (feld[indexFeld].Mensch == true) {
+                    gewonnenComputer = false;
+                }
+                if (feld[indexFeld].Mensch == false && feld[indexFeld].Computer == false) {
+                    gewonnenComputer = false;
+                    gewonnenMensch = false;
+                }
                 zaehlerCol--;
                 zaehlerRow++;
             }
         }
-        if (gewonnen == true) {
-            ausgabeGewonnen();
-        }  */
+        if (gewonnenComputer == true || gewonnenMensch == true) {
+            rGewonnen = true;
+        }
+    }
+    // unentschieden
+    if (rGewonnen == false) {
+        rUnentschieden = true;
+        for (indexFeld = 0; indexFeld < feld.length - 1; indexFeld++) {
+            if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+                rUnentschieden = false;
+                break;
+            }
+        }
+    }
+    if (rGewonnen == true || rUnentschieden == true) {
+        ausgabeGewonnen();
+    }
 }
 function ausgabeGewonnen() {
     /*--------------------------------- */
-    console.log("Ausgabe gewonnen");
+    var audio = new Audio("successtrumpet.mp3");
     if (gewonnenComputer == true) {
         punkteComp++;
-        console.log("Punkte Computer" + punkteComp);
-        /* Hinweis geben */
-        domElement = document.getElementById("hinweis");
-        domElement.innerHTML = "Computer hat diese Runde gewonnen!";
-        domElement = document.getElementById("PunkteC");
-        domElement.innerHTML = "Punkte Computer: " + punkteComp;
-        domElement = document.getElementById("weiter");
-        domElement.setAttribute("class", "");
-        domElement.addEventListener("click", function () { nextRound(); });
-        domElement.setAttribute("class", "weiter");
-        domElement.innerHTML = "nächste Runde";
-        runden++;
-        if (runden > zaehlRunden) {
-            domElement = document.getElementById("Sieger");
-            domElement.innerHTML = "Computer ist Sieger!";
-        }
     }
     if (gewonnenMensch == true) {
         punkteMensch++;
-        /* Hinweis geben */
-        domElement = document.getElementById("hinweis");
+    }
+    /* Hinweis geben */
+    domElement = document.getElementById("hinweis");
+    if (gewonnenComputer == true) {
+        domElement.innerHTML = "Computer hat diese Runde gewonnen!";
+    }
+    if (gewonnenMensch == true) {
         domElement.innerHTML = "Du hast diese Runde gewonnen!";
-        domElement = document.getElementById("PunkteM");
-        domElement.innerHTML = "Punkte Mensch: " + punkteMensch;
-        runden++;
-        if (runden > zaehlRunden) {
+    }
+    if (rUnentschieden == true) {
+        domElement.innerHTML = "Unentschieden";
+    }
+    domElement = document.getElementById("PunkteC");
+    domElement.innerHTML = "Punkte Computer: " + punkteComp;
+    domElement = document.getElementById("PunkteM");
+    domElement.innerHTML = "Punkte Mensch: " + punkteMensch;
+    domElement = document.getElementById("weiter");
+    domElement.addEventListener("click", function () { nextRound(); });
+    domElement.setAttribute("class", "weiter");
+    domElement.innerHTML = "nächste Runde";
+    zaehlRunden++;
+    if (zaehlRunden > runden) {
+        if (punkteMensch > punkteComp) {
             domElement = document.getElementById("Sieger");
             domElement.innerHTML = "Du bist der Sieger!";
-            domElement = document.getElementById("weiter");
-            domElement.setAttribute("class", "");
-            domElement.addEventListener("click", function () { nextRound(); });
+        }
+        else if (punkteComp > punkteMensch) {
+            domElement = document.getElementById("Sieger");
+            domElement.innerHTML = "Computer ist Sieger!";
         }
         else {
-            domElement = document.getElementById("weiter");
-            domElement.setAttribute("class", "weiter");
-            domElement.innerHTML = "nächste Runde";
+            domElement = document.getElementById("Sieger");
+            domElement.innerHTML = "Unentschieden!";
         }
+        // Fanfare    
+        audio.play();
+        domElement = document.getElementById("weiter");
+        domElement.innerHTML = "";
+        domElement.setAttribute("class", "");
+        // Button neues Spiel
+        domElement = document.getElementById("neu");
+        domElement.addEventListener("click", function () { neuesSpiel(); });
+        domElement.setAttribute("class", "neu");
+        domElement.innerHTML = "neues Spiel";
     }
 }
 function nextRound() {
     /*------------------------- */
     console.log("nächste Runde");
+    gewonnenMensch = false;
+    gewonnenComputer = false;
+    unentschieden = false;
+    rGewonnen = false;
+    rUnentschieden = false;
+    /* alle Arrays bekommen Computer = false und Mensch = false */
+    for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
+        feld[indexFeld].Computer = false;
+        feld[indexFeld].Mensch = false;
+        drawNeutral(indexFeld);
+    }
+    domElement = document.getElementById("hinweis");
+    domElement.innerHTML = "";
+    domElement = document.getElementById("Runde");
+    domElement.innerHTML = ("Runde " + zaehlRunden + " von " + runden);
+    computerSpielt();
+}
+function neuesSpiel() {
+    console.log("neues Spiel");
+    location.reload();
 }
 //# sourceMappingURL=script.js.map
