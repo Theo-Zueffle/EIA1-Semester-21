@@ -59,7 +59,7 @@ function wie_schwer (colRow: number): void {
     /* Die Eingabe des Schwierigkeitsgrads wird gesperrt */
     domElement = document.getElementById ("fieldset");
     domElement.setAttribute("disabled" , "true");
-    
+   
     /* Hinweis geben */
     domElement = document.getElementById ("hinweis");
     domElement.innerHTML = "du bist am Zug";
@@ -355,7 +355,10 @@ function gewonnen(): void {
 
 function ausgabeGewonnen(): void {
 /*--------------------------------- */  
-    let audio: HTMLAudioElement = new Audio ("successtrumpet.mp3") ;
+    let audioWin:    HTMLAudioElement = new Audio ("successtrumpet.mp3") ;
+    let audioLose:   HTMLAudioElement = new Audio ("You-lose-sound-effect.mp3") ;
+    let audioApp:    HTMLAudioElement = new Audio ("mixkit-cartoon-monkey-applause-103.wav");
+    let audioWeiter: HTMLAudioElement = new Audio ("mixkit-extra-bonus-in-a-video-game-2045.wav"); 
 
     if (gewonnenComputer == true) {
         punkteComp++;  
@@ -381,6 +384,14 @@ function ausgabeGewonnen(): void {
     domElement = document.getElementById ("PunkteM");
     domElement.innerHTML = "Punkte Mensch: " + punkteMensch; 
 
+    // alle Felder sperren
+    for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
+         if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+            domElement = document.getElementById("b" + indexFeld);
+            domElement.setAttribute("disabled" , "true");
+        }   
+    }
+
     domElement = document.getElementById("weiter");
     domElement.addEventListener("click" , function(): void {nextRound(); }); 
     domElement.setAttribute("class" , "weiter");
@@ -391,16 +402,20 @@ function ausgabeGewonnen(): void {
         if (punkteMensch > punkteComp) {
             domElement = document.getElementById ("Sieger");
             domElement.innerHTML = "Du bist der Sieger!"; 
+             // Fanfare    
+            audioWin.play();
             
         } else if (punkteComp > punkteMensch) {
                 domElement = document.getElementById ("Sieger");
                 domElement.innerHTML = "Computer ist Sieger!"; 
+                 // Verloren-Sound    
+                audioLose.play();
             } else {
                 domElement = document.getElementById ("Sieger");
                 domElement.innerHTML = "Unentschieden!"; 
+                 // Applaus-Sound    
+                audioApp.play() ;
             }
-        // Fanfare    
-        audio.play();
 
         domElement = document.getElementById("weiter");
         domElement.innerHTML = "";
@@ -410,18 +425,24 @@ function ausgabeGewonnen(): void {
         domElement.addEventListener("click" , function(): void {neuesSpiel(); }); 
         domElement.setAttribute("class" , "neu");
         domElement.innerHTML = "neues Spiel";
-    }
+    } else {audioWeiter.play(); }
 }
 
 function nextRound(): void {
 /*------------------------- */    
     console.log("nächste Runde");
 
+    // Variable initialisieren
     gewonnenMensch   = false;
     gewonnenComputer = false;
     unentschieden    = false;
     rGewonnen        = false;
     rUnentschieden   = false;
+    
+    // Button "nächste Runde" entfernen
+    domElement = document.getElementById("weiter");
+    domElement.setAttribute("class" , "");
+    domElement.innerHTML = "";
 
   /* alle Arrays bekommen Computer = false und Mensch = false */
     for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {

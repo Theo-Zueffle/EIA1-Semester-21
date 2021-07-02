@@ -324,7 +324,10 @@ function gewonnen() {
 }
 function ausgabeGewonnen() {
     /*--------------------------------- */
-    var audio = new Audio("successtrumpet.mp3");
+    var audioWin = new Audio("successtrumpet.mp3");
+    var audioLose = new Audio("You-lose-sound-effect.mp3");
+    var audioApp = new Audio("mixkit-cartoon-monkey-applause-103.wav");
+    var audioWeiter = new Audio("mixkit-extra-bonus-in-a-video-game-2045.wav");
     if (gewonnenComputer == true) {
         punkteComp++;
     }
@@ -346,6 +349,13 @@ function ausgabeGewonnen() {
     domElement.innerHTML = "Punkte Computer: " + punkteComp;
     domElement = document.getElementById("PunkteM");
     domElement.innerHTML = "Punkte Mensch: " + punkteMensch;
+    // alle Felder sperren
+    for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
+        if (feld[indexFeld].Computer == false && feld[indexFeld].Mensch == false) {
+            domElement = document.getElementById("b" + indexFeld);
+            domElement.setAttribute("disabled", "true");
+        }
+    }
     domElement = document.getElementById("weiter");
     domElement.addEventListener("click", function () { nextRound(); });
     domElement.setAttribute("class", "weiter");
@@ -355,17 +365,21 @@ function ausgabeGewonnen() {
         if (punkteMensch > punkteComp) {
             domElement = document.getElementById("Sieger");
             domElement.innerHTML = "Du bist der Sieger!";
+            // Fanfare    
+            audioWin.play();
         }
         else if (punkteComp > punkteMensch) {
             domElement = document.getElementById("Sieger");
             domElement.innerHTML = "Computer ist Sieger!";
+            // Verloren-Sound    
+            audioLose.play();
         }
         else {
             domElement = document.getElementById("Sieger");
             domElement.innerHTML = "Unentschieden!";
+            // Applaus-Sound    
+            audioApp.play();
         }
-        // Fanfare    
-        audio.play();
         domElement = document.getElementById("weiter");
         domElement.innerHTML = "";
         domElement.setAttribute("class", "");
@@ -375,15 +389,23 @@ function ausgabeGewonnen() {
         domElement.setAttribute("class", "neu");
         domElement.innerHTML = "neues Spiel";
     }
+    else {
+        audioWeiter.play();
+    }
 }
 function nextRound() {
     /*------------------------- */
     console.log("nächste Runde");
+    // Variable initialisieren
     gewonnenMensch = false;
     gewonnenComputer = false;
     unentschieden = false;
     rGewonnen = false;
     rUnentschieden = false;
+    // Button "nächste Runde" entfernen
+    domElement = document.getElementById("weiter");
+    domElement.setAttribute("class", "");
+    domElement.innerHTML = "";
     /* alle Arrays bekommen Computer = false und Mensch = false */
     for (indexFeld = 0; indexFeld < feld.length; indexFeld++) {
         feld[indexFeld].Computer = false;
